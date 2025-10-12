@@ -8,6 +8,7 @@ Username: ortjy007
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
+
 class Asset:
     """
     Asset class with the following attributes:
@@ -24,7 +25,7 @@ class Asset:
 
     Assets can be moved between hacker and rig , used in actions or consumed during upgrades
     """
-    ASSETS = [] #wip to include all identified
+    ASSETS = []  # wip to include all identified
 
     def __init__(self, name, description, encrypted=False) -> None:
         self.__name = name

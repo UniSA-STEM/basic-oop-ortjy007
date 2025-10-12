@@ -7,6 +7,8 @@ ID: 110482203
 Username: ortjy007
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
+
+
 class Hacker:
     """
     Hacker class with the following attributes:
@@ -37,7 +39,7 @@ class Hacker:
 
     def __init__(self, name: str) -> None:
         self.__name = name
-        self.__inventory = # TODO call asset class, core assets as a list
+        self.__inventory =  # TODO call asset class, core assets as a list
         self.__trace_level = 0
         self.__exposed = False
 
@@ -74,4 +76,3 @@ class Hacker:
     def scan_inventory(self):
         # by name and returning if found
         pass
-
