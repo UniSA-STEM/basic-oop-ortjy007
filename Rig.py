@@ -78,6 +78,9 @@ class Rig:
 
     # Properties
     name = property(get_name, set_name)
+    damage = property(get_damage)
+    broken = property (get_broken)
+    level = property (get_level)
 
     def store_asset(self, asset_name: str, asset_encrypted: bool) -> str:
         # method o transfer asset to and from hackers inventory
