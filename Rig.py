@@ -36,7 +36,7 @@ class Rig:
     store_asset: add to storage list # amount of storage is level dependent,is there a maximum/minimum capacity?
     release_asset: bool
         # based on Hacker action
-    scan_inventory: str
+    scan_storage: str
         #list of items contained in the Rig's storage
     """
 
@@ -87,4 +87,7 @@ class Rig:
     def rig_upgrade(self, hardware_patch):
         # require a rig and hardware patch
         # increases the rigs level which affects the battle damage and amount of assets stored
+        pass
+
+    def scan_storage(self, storage):
         pass
