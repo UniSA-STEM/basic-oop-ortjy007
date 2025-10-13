@@ -11,7 +11,9 @@ from Hacker import Hacker
 from Rig import Rig
 from Asset import Asset
 
-
+"""
+sample scenarios to test
+"""
 def main():
 
     h1 = Hacker('h1')
