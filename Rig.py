@@ -41,7 +41,7 @@ class Rig:
     """
 
     def __init__(self, name, storage, storage_size, damage=0, broken=False, level=0,
-                 data_spikes=2, removable_drives=1):
+                 data_spikes=2, removable_drives=1) -> None:
         self.name = name
         self.__storage = storage
         self.__storage_size = storage_size
@@ -51,7 +51,7 @@ class Rig:
         self.__data_spikes = data_spikes
         self.__removable_drives = removable_drives
 
-    def __str__(self):
+    def __str__(self) -> str:
         # name, condition, upgrade level, stored assets
         return (f'{self.name}\nCondition:{self.__broken}\nUpgrade level:{self.__level}\n'
                 f'Stored assets:{self.__storage}')
