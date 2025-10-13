@@ -7,8 +7,15 @@ Username: ortjy007
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
+from Hacker import Hacker
+from Rig import Rig
+from Asset import Asset
+
+
 def main():
-    #Implementation
+
+    h1 = Hacker('h1')
+    print(h1)
     pass
 
 if __name__ == "__main__":
