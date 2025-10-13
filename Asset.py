@@ -51,14 +51,18 @@ class Asset:
         return self.__encrypted
 
     # Setters
-    def set_name(self) -> str:
+    def set_name(self, name: str) -> str:
+        if type(name) == str:
+            self.__name
+        else:
+            print('Invalid name.')
         return self.__name
 
     def set_description(self) -> str:
         return self.__description
 
     def set_encrypted(self, status: bool) -> bool:
-        self.__encrypted = status
+        return # self.__encrypted = status
 
     # Properties
     name = property (get_name, set_name)
