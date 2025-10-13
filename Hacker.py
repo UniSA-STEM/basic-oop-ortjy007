@@ -103,14 +103,14 @@ class Hacker:
     def decrypt_asset(self, security_chip) -> bool:
         pass
 
-    def store_asset(self) -> list:
+    def store_asset(self, asset_name: str) -> list:
         # between inventory and rigs storage
         pass
 
-    def retrieve_asset(self) -> str:
+    def retrieve_asset(self, asset_name: str) -> str:
         # between inventory and rigs storage
         pass
 
-    def scan_inventory(self) -> list:
+    def scan_inventory(self, inventory: list) -> list:
         # by name and returning if found
         pass
