@@ -52,7 +52,7 @@ class Rig:
 
     def __str__(self) -> str:
         # name, condition, upgrade level, stored assets
-        return (f'{self.name}\nCondition:{self.__broken}\nUpgrade level:{self.__level}\n'
+        return (f'{self.__name}\nCondition:{self.__broken}\nUpgrade level:{self.__level}\n'
                 f'Stored assets:{self.__storage}')
 
     # Getter

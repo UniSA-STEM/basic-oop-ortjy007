@@ -55,7 +55,7 @@ class Hacker:
         self.__exposed = False
 
     def __str__(self) -> str:
-        return f'{self.name}\nRig name:{Asset.get_name}\nInventory:{self.__inventory}'
+        return f'{self.__name}\nRig name:{Asset.get_name}\nInventory:{self.__inventory}'
 
     # Getters
     def get_name(self) -> str:
