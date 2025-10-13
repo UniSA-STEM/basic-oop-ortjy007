@@ -51,8 +51,19 @@ class Asset:
         return self.__encrypted
 
     # Setters
+    def set_name(self) -> str:
+        return self.__name
+
+    def set_description(self) -> str:
+        return self.__description
+
     def set_encrypted(self, status: bool) -> bool:
         self.__encrypted = status
+
+    # Properties
+    name = property (get_name, set_name)
+    description = property (get_description, set_description)
+    encrypted = property(get_encrypted, set_encrypted)
 
     def crypto_token(self) -> str:
         # Hidden asset used to acquire or repair rigs
