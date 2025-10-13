@@ -49,7 +49,7 @@ class Hacker:
     """
 
     def __init__(self, name: str, ) -> None:
-        self.name = name
+        self.__name = name
         self.__inventory = []
         self.__trace_level = 0
         self.__exposed = False
@@ -57,31 +57,56 @@ class Hacker:
     def __str__(self) -> str:
         return f'{self.name}\nRig name:{Asset.get_name}\nInventory:{self.__inventory}'
 
-    def acquire_rig(self):
+    # Getters
+    def get_name(self) -> str:
+        return self.__name
+
+    def get_trace_level(self) -> int:
+        return self.__trace_level
+
+    def get_exposed(self) -> bool:
+        return self.__exposed
+
+    # Setters
+    def set_name(self) -> str:
+        return self.__name
+
+    def set_trace_level(self) -> int:
+        return self.__trace_level
+
+    def set_exposed(self) -> bool:
+        return self.__exposed
+
+    # Properties
+    name = property (set_name, get_name)
+    trace_level = property (get_trace_level, set_trace_level)
+    exposed = property(get_exposed, set_exposed)
+
+    def acquire_rig(self) -> str:
         # print message announcing activation
         pass
 
-    def launch_data_spikes(self):
+    def launch_data_spikes(self) -> str:
         # consumes data spikes from their rigs storage
         pass
 
-    def extract_asset(self):
+    def extract_asset(self) -> str:
         pass
 
-    def encrypt_asset(self, security_chip):
+    def encrypt_asset(self, security_chip) -> bool:
         pass
 
-    def decrypt_asset(self, security_chip):
+    def decrypt_asset(self, security_chip) -> bool:
         pass
 
-    def store_asset(self):
+    def store_asset(self) -> list:
         # between inventory and rigs storage
         pass
 
-    def retrieve_asset(self):
+    def retrieve_asset(self) -> str:
         # between inventory and rigs storage
         pass
 
-    def scan_inventory(self):
+    def scan_inventory(self) -> list:
         # by name and returning if found
         pass
