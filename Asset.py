@@ -11,17 +11,19 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 
 class Asset:
     """
+    Representing digital assets can be moved between Hacker's inventory and
+    their Rig's storage. Are used in actions or consumed during upgrades.
     Asset class with the following attributes:
     +name: str
     -description: str
     -encrypted=False
 
     And the following methods:
-    +crypto_token
-    +data_spikes
-    +removable_drive
-    +security_rig
-    +hardware_patch
+    +crypto_token: Rig_name # to acquire or repair rigs (H)
+    +hardware_patch: rig_name # update rigs level & storage (H)
+    +data_spikes: target_rig # check storage, update lists, update damage (R)
+    +removable_drive: target_rig, destination_rig # found in rigs used for extraction (R)
+    +security_rig: asset_name # used to encrypt or decrypt assets (H or R)
 
     Assets can be moved between hacker and rig , used in actions or consumed during upgrades
     """
@@ -33,6 +35,7 @@ class Asset:
         self.__encrypted = encrypted
 
     def __str__(self) -> str:
+        # return f'{self.name}\nRig name:{Asset.get_name}\nInventory:{self.__inventory}'
         # <name>:<description>[Encrypted]
         # <name>:<description>
         pass
