@@ -18,6 +18,9 @@ def main():
 
     h1 = Hacker('h1')
     print(h1)
+
+    r1 = Rig('r1')
+    print(r1)
     pass
 
 if __name__ == "__main__":
