@@ -24,12 +24,12 @@ class Rig:
     -storage_size: int # check if this is independent or part of the storage attribute
 
     And the following methods:
-    acquire_rig: Hacker, cost, default state
     generate_asset:
         # one per turn? and what asset can be generated?, level dependent? to be saved as asset
     launch_data_spikes: target_rig
         # update target_rig status and originator_rig storage lists
-    repair_rig: target_rig # need a crypto_token, resets damage to 0 and broken to False
+    rig_repair: target_rig # need a crypto_token, resets damage to 0 and broken to False
+    rig_condition: target_rig
     extract_asset: target_rig, originator_rig, target_rig_staus, originator_rig_status
         # need to check staus of rig (not damaged), and
         asset (not encrypted) update both target and originator storage lists
