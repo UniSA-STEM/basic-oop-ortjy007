@@ -48,7 +48,7 @@ class Hacker:
     The inventory and Rig's storage are different lists
     """
 
-    def __init__(self, name: str, ) -> None:
+    def __init__(self, name: str ) -> None:
         self.__name = name
         self.__inventory = []
         self.__trace_level = 0
@@ -68,7 +68,11 @@ class Hacker:
         return self.__exposed
 
     # Setters
-    def set_name(self) -> str:
+    def set_name(self, name: str) -> str:
+        if type(name) == str:
+            self.__name
+        else:
+            print('Invalid name.')
         return self.__name
 
     def set_trace_level(self) -> int:
