@@ -30,6 +30,8 @@ class Rig:
         # update target_rig status and originator_rig storage lists
     rig_repair: target_rig # need a crypto_token, resets damage to 0 and broken to False
     rig_condition: target_rig
+    rig_update: target_rig, hacker # requires Hardware patch, increases rig level, improves storage
+        size, reduces attacks damage.
     extract_asset: target_rig, originator_rig, target_rig_staus, originator_rig_status
         # need to check staus of rig (not damaged), and
         asset (not encrypted) update both target and originator storage lists
