@@ -42,54 +42,75 @@ class Rig:
         #list of items contained in the Rig's storage
     """
 
-    def __init__(self, name, storage, storage_size, damage=0, broken=False, level=0,
-                 data_spikes=2, removable_drives=1) -> None:
-        self.name = name
-        self.__storage = storage
-        self.__storage_size = storage_size
-        self.__damage = damage
-        self.__broken = broken
-        self.__level = level
-        self.__data_spikes = data_spikes
-        self.__removable_drives = removable_drives
+    def __init__(self, name: str) -> None:
+        self.__name = name
+        self.__storage = []
+        self.__storage_size = 0
+        self.__damage = 0
+        self.__broken = False
+        self.__level = 0
 
     def __str__(self) -> str:
         # name, condition, upgrade level, stored assets
         return (f'{self.name}\nCondition:{self.__broken}\nUpgrade level:{self.__level}\n'
                 f'Stored assets:{self.__storage}')
 
-    def store_asset(self):
+    # Getter
+    def get_name(self) -> str:
+        return self.__name
+
+    def get_damage(self) -> int:
+        return self.__damage
+
+    def get_broken(self) -> bool:
+        return self.__broken
+
+    def get_level(self) -> int:
+        return self.__level
+
+    # Setter
+    def set_name(self, name: str) -> str:
+        if type(name) == str:
+            self.__name
+        else:
+            print('Invalid name.')
+        return self.__name
+
+    # Properties
+    name = property(get_name, set_name)
+
+    def store_asset(self, asset_name: str, asset_encrypted: bool) -> str:
         # method o transfer asset to and from hackers inventory
         pass
 
-    def release_asset(self):
+    def release_asset(self, asset_name: str, asset_encrypted: bool) -> str:
         # method o transfer asset to and from hackers inventory
         # encrypted assets can not be transferred until decrypted
         pass
 
-    def extract_asset(self):
+    def extract_asset(self, asset_name: str, asset_encrypted: bool) -> str:
         # through consuming a removable drive
         # transferring all to their own inventory
         pass
 
-    def generate_asset(self):
+    def generate_asset(self) -> None:
         # no control over what type of asset but it generates one at the time
         pass
 
-    def rig_repair(self, counter: int, broken: bool):
+    def rig_repair(self, crypto_token: bool, counter: int, broken: bool) -> None:
         # Use of crypto token
         # if damaged the counter resets to 0
         # if not damaged print message
         pass
 
-    def rig_condition(self):
+    def rig_condition(self, level: int) -> int:
         # based on damage and upgrade level 2-0?
         pass
 
-    def rig_upgrade(self, hardware_patch):
+    def rig_upgrade(self, hardware_patch: bool, level: int) -> int:
         # require a rig and hardware patch
         # increases the rigs level which affects the battle damage and amount of assets stored
         pass
 
-    def scan_storage(self, storage):
+    def scan_storage(self, storage: list) -> list:
         pass
