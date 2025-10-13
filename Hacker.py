@@ -10,6 +10,7 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 from Asset import Asset
 from Rig import Rig
 
+
 class Hacker:
     """
     Hacker represents a person (with a cryptic and/or stylish pseudonym) who
@@ -47,7 +48,7 @@ class Hacker:
     The inventory and Rig's storage are different lists
     """
 
-    def __init__(self, name: str,) -> None:
+    def __init__(self, name: str, ) -> None:
         self.name = name
         self.__inventory = []
         self.__trace_level = 0
