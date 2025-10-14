@@ -30,16 +30,14 @@ class Asset:
     """
     ASSETS = []  # wip to include all identified
 
-# Defining Asset Class, name, description and encryption status.
+    # Defining Asset Class, name, description and encryption status.
 
     def __init__(self, name, description) -> None:
         self.__name = name
         self.__description = description
         self.__encrypted = False
 
-
     def __str__(self) -> str:
-
 
         # return f'{self.name}\nRig name:{Asset.get_name}\nInventory:{self.__inventory}'
         # <name>:<description>[Encrypted]
@@ -87,6 +85,6 @@ class Asset:
         return self.__encrypted
 
     # Properties
-    name = property (get_name, set_name)
-    description = property (get_description, set_description)
+    name = property(get_name, set_name)
+    description = property(get_description, set_description)
     encrypted = property(get_encrypted)
