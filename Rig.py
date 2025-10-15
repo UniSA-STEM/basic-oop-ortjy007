@@ -8,6 +8,8 @@ Username: ortjy007
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 import re
+from random import randint
+
 import Asset
 import Hacker
 
@@ -34,8 +36,7 @@ class Rig:
     scan_storage: Generates a list of items contained in the Rig's
     storage including encryption status.
 
-    generate_asset: # one per turn? and what asset can be generated?, level
-    dependent? to be saved as asset.
+    generate_asset: Generate a random asset from the Asset module
 
     store_asset: Saves asset in Rig's storage.
 
@@ -113,12 +114,20 @@ class Rig:
         print(f"\n{self.__name}'s storage capacity is: {self.__storage_size}")
         print(f'And contains the following assets:')
         for item in self.__storage:
-            print(f'{item.get_name} ({'encrypted' if item.get_encrypted else 'decrypted'})')
+            print(f'{item.get_name} ({'encrypted' if item.get_encrypted
+            else 'decrypted'})')
         return self.__storage
 
-    def generate_asset(self) -> None:
-        # no control over what type of asset but it generates one at the time
-        pass
+    def generate_asset(self) -> Asset:
+        """
+        Generating a random asset from the Asset types valid in the
+        Asset module
+        :return: new asset
+        """
+        select = randint(0, len(Asset.Asset.types_) - 1)
+        new_asset = Asset.Asset(Asset.Asset.types_[select])
+        print(f'The following asset has been created: {new_asset.get_name}')
+        return new_asset
 
     def store_asset(self, asset) -> list:
         """
@@ -155,7 +164,7 @@ class Rig:
         hacker_name = Hacker.Hacker.get_name
         if name in self.__storage and asset_encrypted == False:
             released_asset = name
-            #Hacker.get_name.inventory
+            # Hacker.get_name.inventory
 
         # method o transfer asset to and from hackers inventory
         # encrypted assets can not be transferred until decrypted
@@ -192,7 +201,7 @@ class Rig:
 
     def rig_upgrade(self, asset) -> None:
         if asset.get_name == 'hardware_patch':
-            self.__upgrade_level +=1
+            self.__upgrade_level += 1
             print(f"{self.__name}'s has been updated to level {self.__upgrade_level}.")
         return None
 
@@ -205,6 +214,7 @@ class Rig:
 
 
 r2 = Rig('r2')
+"""
 print(r2.get_broken)
 r2.rig_condition()
 
@@ -214,3 +224,5 @@ print(asset1.is_asset())
 print(asset1.get_name)
 r2.rig_repair(asset1)
 r2.rig_upgrade(asset2)
+"""
+r2.generate_asset()
