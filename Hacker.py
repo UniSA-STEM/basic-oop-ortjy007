@@ -1,15 +1,13 @@
 """
 File: Hacker.py
 Description: Module to define the Hacker class and Methods part of
-the Hacker-Rig-Asset combo.
+the Into the Grid OOP Basic Programming assessment COMP 1048 2025P6.
 Author: Jorge Ortega
 ID: 110482203
 Username: ortjy007
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
-from Asset import Asset
-from Rig import Rig
-
+import re
 
 class Hacker:
     """
@@ -49,7 +47,8 @@ class Hacker:
     """
 
     def __init__(self, name: str ) -> None:
-        self.__name = name
+        self.__name = name if (name == re.search(r'[a-zA-Z]', name)
+                               or re.search(r'\d', name)) else 'Invalid name.'
         self.__inventory = []
         self.__trace_level = 0
         self.__exposed = False
@@ -68,11 +67,7 @@ class Hacker:
         return self.__exposed
 
     # Setters
-    def set_name(self, name: str) -> str:
-        if type(name) == str:
-            self.__name
-        else:
-            print('Invalid name.')
+    def set_name(self) -> str:
         return self.__name
 
     def set_trace_level(self) -> int:
