@@ -31,14 +31,15 @@ class Rig:
     attribute
 
     the following methods:
-    scan_storage: str #list of items contained in the Rig's storage
+    scan_storage: Generates a list of items contained in the Rig's
+    storage including encryption status
 
     generate_asset: # one per turn? and what asset can be generated?, level
     dependent? to be saved as asset
 
-    store_asset: list # Saves asset in Rig's storage
+    store_asset: Saves asset in Rig's storage
 
-    use_asset: list # Delete's asset fom Rig's storage either used in actions
+    use_asset: Delete's asset fom Rig's storage either used in actions
     or consumed during upgrades
 
     transfer_asset: target_rig: str, originator_rig: str, target_rig_staus: str,
@@ -47,10 +48,10 @@ class Rig:
 
     extract_asset:
 
-    rig_repair: target_rig: str # need a crypto_token, resets damage to 0 and
-    broken to False
+    rig_repair: Repairs a Rig's if the Rig is damaged and a crypto_token is
+    given; damage gets reset to 0 and broken status changed to False
 
-    rig_condition: target_rig: str
+    rig_condition: Prints the condition of the Rig (0-2)
 
     rig_update: target_rig: str, hacker: str # requires Hardware patch, increases rig level, improves storage
         size, reduces attacks damage.
@@ -65,27 +66,24 @@ class Rig:
     broken
 
     level
-
-    ##### Extract to be deleted:
-    A Rig represents a computer object.
-    Can take hits from data spikes, each hit increases the damage by 1,
-    if damage is 2 (for a level0 rig) it becomes broken.
     """
 
     def __init__(self, name: str) -> None:
         self.__name = name if (name == re.search(r'[a-zA-Z]', name)
                                or re.search(r'\d', name)) else 'Invalid name.'
         self.__storage_size = 5
-        self.__storage = []
+        self.__storage = [Asset.Asset('data_spike'), Asset.Asset('data_spike'),
+                          Asset.Asset('removable_drive')
+                          ]
         self.__damage = 0
-        self.__broken = False
-        self.__level = 0
+        self.__broken = False if self.__damage != 2 else True
+        self.__upgrade_level = 0
 
     def __str__(self) -> str:
         # name, condition, upgrade level, stored assets
-        return f'Name: {self.__name}\nCondition: {'Operational' 
+        return f'Name: {self.__name}\nCondition: {'Operational'
         if not self.__broken else 'Broken'}'
-        #f'Stored assets:{Rig.STORAGE}')
+        # f'Stored assets:{Rig.STORAGE}')
 
     @property
     def get_name(self) -> str:
@@ -105,10 +103,19 @@ class Rig:
 
     @property
     def get_level(self) -> int:
-        return self.__level
+        return self.__upgrade_level
 
-    def scan_storage(self, storage: list) -> list:
-        pass
+    def scan_storage(self) -> list:
+        """
+        Method to retrieve a list of contents in the Rig's storage including
+        its maximum capacity and whether the asset is encrypted or not
+        :return: self.__storage
+        """
+        print(f"\n{self.__name}'s storage capacity is: {self.__storage_size}")
+        print(f'And contains the following assets:')
+        for item in self.__storage:
+            print(f'{item.get_name} ({'encrypted' if item.get_encrypted else 'decrypted'})')
+        return self.__storage
 
     def generate_asset(self) -> None:
         # no control over what type of asset but it generates one at the time
@@ -117,7 +124,7 @@ class Rig:
     def store_asset(self, asset) -> list:
         """
         Method to transfer save asset in Rig's storage
-        :param asset:
+        :param asset: validated as asset
         :return: self.__storage
         """
         # Validating asset and storage capacity
@@ -125,45 +132,66 @@ class Rig:
             self.__storage.append(asset)
             print(f"asset {asset.get_name} has been put in the Rig's storage")
         elif not asset.is_asset():
-            print('"non-assets cannot be saved in storage')
+            print('non-assets cannot be saved in storage')
         elif len(self.__storage) >= self.__storage_size:
             print(f'Storage is a maximum capacity, asset cannot be saved')
         return self.__storage
 
     def use_asset(self, asset):
+        """
+        Method to remove assets from storage
+        :param asset: validated as asset
+        :return: self.__storage
+        """
+        # Validating asset and checking if it exists in storage
         if asset.is_asset() and asset in self.__storage:
             self.__storage.remove(asset)
-            print(f'asset {asset.get_name} has been used and removed from storage')
+            print(f'asset {asset.get_name} has been used and removed '
+                  f'from storage')
         elif not asset.is_asset():
             print('"non-assets cannot be used')
         return self.__storage
 
-    def transfer_asset(self, asset_name: str, asset_encrypted: bool, hacker_name: str) -> list:
+    def transfer_asset(self, name: str, asset_encrypted: bool, hacker_name: str) -> list:
         hacker_name = Hacker.Hacker.get_name
-        if asset_name in self.__storage and asset_encrypted == False:
-            released_asset = asset_name
+        if name in self.__storage and asset_encrypted == False:
+            released_asset = name
             Hacker.name.inventory
 
         # method o transfer asset to and from hackers inventory
         # encrypted assets can not be transferred until decrypted
         pass
 
-    def extract_asset(self, asset_name: str, asset_encrypted: bool) -> str:
+    def extract_asset(self, name: str, asset_encrypted: bool) -> str:
         # through consuming a removable drive
         # transferring all to their own inventory
         pass
 
-    def rig_repair(self, crypto_token: bool, counter: int, broken: bool) -> None:
-        # Use of crypto token
-        # if damaged the counter resets to 0
-        # if not damaged print message
-        pass
+    def rig_repair(self, asset) -> None:
+        """
+        Method to repair a damaged Rig
+        :param asset: validated as 'crypto_token'
+        :return: None
+        """
+        if not self.__broken:
+            print('Rig is not broken no repairs needed')
+        elif not asset.get_name == 'crypto_token':
+            print('Invalid asset, you need a Rig crypto_token to repair a Rig')
+        else:
+            self.__damage = 0
+            print(f'Rig repaired: damage level reset to {self.__damage}')
+        return None
 
-    def rig_condition(self, level: int) -> int:
-        # based on damage and upgrade level 2-0?
-        pass
+    def rig_condition(self) -> None:
+        """
+        Method to check the condition of a Rig
+        :return: None
+        """
+        condition = {0: 'Pristine', 1: '50%', 2: 'Broken'}
+        print(f"\n{self.__name}'s condition is {condition[self.__damage]}")
+        return None
 
-    def rig_upgrade(self, hardware_patch: bool, level: int) -> int:
+    def rig_upgrade(self, asset) -> int:
         # require a rig and hardware patch
         # increases the rigs level which affects the battle damage and amount of assets stored
         pass
@@ -172,5 +200,15 @@ class Rig:
     name = property(get_name)
     storage = property(get_storage)
     damage = property(get_damage)
-    broken = property (get_broken)
-    level = property (get_level)
+    broken = property(get_broken)
+    level = property(get_level)
+
+
+r2 = Rig('r2')
+print(r2.get_broken)
+r2.rig_condition()
+
+asset1 = Asset.Asset('crypto_token')
+print(asset1.is_asset())
+print(asset1.get_name)
+r2.rig_repair(asset1)
