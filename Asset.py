@@ -38,10 +38,7 @@ class Asset:
     """
 
     # ASSETS = []  # WIP to include all identified
-    # TYPES_ = []  # WIP to include all types_
-
     # Defining Asset Class, name, description and encryption status.
-
     def __init__(self, type_) -> None:
         self.__type_ = type_
 
@@ -95,17 +92,16 @@ class Asset:
     description = property(get_description)
     encrypted = property(get_encrypted)
 
-def is_asset(item):
-    """
-    Helper to check if object is an Asset
-    :param item:
-    :return: bool
-    """
-    return isinstance(item, Asset)
+    def is_asset(self):
+        """
+        Helper to check if object is an Asset
+        :param item:
+        :return: bool
+        """
+        return True if isinstance(self, Asset) and self.__name in Asset.TYPES_ else False
 
-"""asset1 = Asset('crypto_token')
+asset1 = Asset('chunky')
 asset2 = 3
 print(asset1.get_name, asset1.get_description, asset1.get_encrypted)
 
-print(is_asset(asset1))
-print(is_asset(asset2))"""
+#print(asset2.is_asset(3))
