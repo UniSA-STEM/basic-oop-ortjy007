@@ -41,7 +41,9 @@ def main():
     print(type(asset1))
     r1.store_asset(asset1)
     r1.store_asset(asset2)
-    print(r1.get_storage[0].get_name, r1.get_storage[1].get_name )
+
+    r1.scan_storage()
+    r1.rig_condition()
 
 
 if __name__ == "__main__":
