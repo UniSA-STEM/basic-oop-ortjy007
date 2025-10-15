@@ -36,8 +36,9 @@ class Asset:
     Representing digital assets can be moved between Hacker's inventory and
     their Rig's storage. Are used in actions or consumed during upgrades.
     """
-    ASSETS = []  # WIP to include all identified
-    TYPES_ = []  # WIP to include all types_
+
+    # ASSETS = []  # WIP to include all identified
+    # TYPES_ = []  # WIP to include all types_
 
     # Defining Asset Class, name, description and encryption status.
 
@@ -67,13 +68,15 @@ class Asset:
                 f'Description: {self.__description}\n'
                 f'Encrypted: {self.__encrypted}')
 
-    # Getters
+    @property
     def get_name(self) -> str:
         return self.__name
 
+    @property
     def get_description(self) -> str:
         return self.__description
 
+    @property
     def get_encrypted(self) -> bool:
         return self.__encrypted
 
@@ -91,3 +94,18 @@ class Asset:
     name = property(get_name)
     description = property(get_description)
     encrypted = property(get_encrypted)
+
+def is_asset(item):
+    """
+    Helper to check if object is an Asset
+    :param item:
+    :return: bool
+    """
+    return isinstance(item, Asset)
+
+"""asset1 = Asset('crypto_token')
+asset2 = 3
+print(asset1.get_name, asset1.get_description, asset1.get_encrypted)
+
+print(is_asset(asset1))
+print(is_asset(asset2))"""
