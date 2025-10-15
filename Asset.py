@@ -41,13 +41,15 @@ class Asset:
     def __init__(self, type_: str) -> None:
         self.__type_ = type_
 
-        Asset.TYPES_ = ['crypto_token', 'hardware_patch', 'data_spikes', 'removable_drive', 'security_rig']
+        Asset.types_ = ['crypto_token', 'hardware_patch', 'data_spike',
+                        'removable_drive', 'security_rig'
+                        ]
 
         if type_ == 'crypto_token':
             self.__description = 'Used to acquire or repair rigs.(H)'
         elif type_ == 'hardware_patch':
             self.__description = 'Used to update rigs -level & storage-.(H)'
-        elif type_ == 'data_spikes':
+        elif type_ == 'data_spike':
             self.__description = 'Used in battles to damage rigs.(R)'
         elif type_ == 'removable_drive':
             self.__description = 'Found in rigs and used for extraction.(R)'
@@ -56,7 +58,7 @@ class Asset:
         else:
             self.__description = 'Unidentified asset.'
 
-        self.__name = type_ if type_ in Asset.TYPES_ else 'unidentified'
+        self.__name = type_ if type_ in Asset.types_ else 'unidentified'
         self.__encrypted = False
 
     def __str__(self) -> str:
@@ -92,7 +94,7 @@ class Asset:
         :param item:
         :return: bool
         """
-        return True if isinstance(self, Asset) and self.__name in Asset.TYPES_ else False
+        return True if isinstance(self, Asset) and self.__name in Asset.types_ else False
 
     # Properties
     name = property(get_name)
