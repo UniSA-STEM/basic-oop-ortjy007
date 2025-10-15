@@ -37,8 +37,6 @@ class Asset:
     their Rig's storage. Are used in actions or consumed during upgrades.
     """
 
-    # ASSETS = []  # WIP to include all identified
-
     # Defining Asset Class, name, description and encryption status.
     def __init__(self, type_: str) -> None:
         self.__type_ = type_
@@ -88,7 +86,7 @@ class Asset:
         self.__encrypted = status
         return self.__encrypted
 
-    def is_asset(self):
+    def is_asset(self) -> bool:
         """
         Helper to check if object is an Asset
         :param item:
