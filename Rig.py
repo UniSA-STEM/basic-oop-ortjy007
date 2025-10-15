@@ -32,29 +32,28 @@ class Rig:
 
     the following methods:
     scan_storage: Generates a list of items contained in the Rig's
-    storage including encryption status
+    storage including encryption status.
 
     generate_asset: # one per turn? and what asset can be generated?, level
-    dependent? to be saved as asset
+    dependent? to be saved as asset.
 
-    store_asset: Saves asset in Rig's storage
+    store_asset: Saves asset in Rig's storage.
 
     use_asset: Delete's asset fom Rig's storage either used in actions
-    or consumed during upgrades
+    or consumed during upgrades.
 
     transfer_asset: target_rig: str, originator_rig: str, target_rig_staus: str,
     originator_rig_status: str # need to check staus of rig (not damaged), and
-    asset (not encrypted) update both target and originator storage lists
+    asset (not encrypted) update both target and originator storage lists.
 
     extract_asset:
 
     rig_repair: Repairs a Rig's if the Rig is damaged and a crypto_token is
-    given; damage gets reset to 0 and broken status changed to False
+    given; damage gets reset to 0 and broken status changed to False.
 
-    rig_condition: Prints the condition of the Rig (0-2)
+    rig_condition: Prints the condition of the Rig (0-2).
 
-    rig_update: target_rig: str, hacker: str # requires Hardware patch, increases rig level, improves storage
-        size, reduces attacks damage.
+    rig_update: Upgrades Rig's level if a hardware_patch is given.
 
     and the following properties:
     name
@@ -156,7 +155,7 @@ class Rig:
         hacker_name = Hacker.Hacker.get_name
         if name in self.__storage and asset_encrypted == False:
             released_asset = name
-            Hacker.name.inventory
+            #Hacker.get_name.inventory
 
         # method o transfer asset to and from hackers inventory
         # encrypted assets can not be transferred until decrypted
@@ -191,10 +190,11 @@ class Rig:
         print(f"\n{self.__name}'s condition is {condition[self.__damage]}")
         return None
 
-    def rig_upgrade(self, asset) -> int:
-        # require a rig and hardware patch
-        # increases the rigs level which affects the battle damage and amount of assets stored
-        pass
+    def rig_upgrade(self, asset) -> None:
+        if asset.get_name == 'hardware_patch':
+            self.__upgrade_level +=1
+            print(f"{self.__name}'s has been updated to level {self.__upgrade_level}.")
+        return None
 
     # Properties
     name = property(get_name)
@@ -209,6 +209,8 @@ print(r2.get_broken)
 r2.rig_condition()
 
 asset1 = Asset.Asset('crypto_token')
+asset2 = Asset.Asset('hardware_patch')
 print(asset1.is_asset())
 print(asset1.get_name)
 r2.rig_repair(asset1)
+r2.rig_upgrade(asset2)
