@@ -7,7 +7,8 @@ ID: 110482203
 Username: ortjy007
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
-
+import re
+from re import search
 
 STORAGE = []  # WIP to include all assets identified
 
@@ -60,7 +61,8 @@ class Rig:
     """
 
     def __init__(self, name: str) -> None:
-        self.__name = name
+        self.__name = name if (name == re.search(r'[a-zA-Z]', name)
+                               or re.search(r'\d', name)) else 'Invalid name.'
         self.__storage_size = 0
         self.__damage = 0
         self.__broken = False
@@ -73,7 +75,7 @@ class Rig:
         #f'Stored assets:{Rig.STORAGE}')
 
     # Getter
-    def get_name(self) -> str:
+    def get_name(self, __name: str) -> str:
         return self.__name
 
     def get_damage(self) -> int:
@@ -86,13 +88,6 @@ class Rig:
         return self.__level
 
     # Setter
-    def set_name(self, name: str) -> str:
-        if type(name) == str:
-            self.__name = name
-        else:
-            print('Invalid name.')
-        return self.__name
-
     def store_asset(self, asset_name: str) -> str:
         #if isinstance(asset_name, Asset) and
 
@@ -132,7 +127,7 @@ class Rig:
         pass
 
     # Properties
-    name = property(get_name, set_name)
+    name = property(get_name)
     damage = property(get_damage)
     broken = property (get_broken)
     level = property (get_level)
