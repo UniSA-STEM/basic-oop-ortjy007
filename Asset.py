@@ -38,8 +38,9 @@ class Asset:
     """
 
     # ASSETS = []  # WIP to include all identified
+
     # Defining Asset Class, name, description and encryption status.
-    def __init__(self, type_) -> None:
+    def __init__(self, type_: str) -> None:
         self.__type_ = type_
 
         Asset.TYPES_ = ['crypto_token', 'hardware_patch', 'data_spikes', 'removable_drive', 'security_rig']
@@ -87,11 +88,6 @@ class Asset:
         self.__encrypted = status
         return self.__encrypted
 
-    # Properties
-    name = property(get_name)
-    description = property(get_description)
-    encrypted = property(get_encrypted)
-
     def is_asset(self):
         """
         Helper to check if object is an Asset
@@ -100,8 +96,21 @@ class Asset:
         """
         return True if isinstance(self, Asset) and self.__name in Asset.TYPES_ else False
 
-asset1 = Asset('chunky')
-asset2 = 3
-print(asset1.get_name, asset1.get_description, asset1.get_encrypted)
+    # Properties
+    name = property(get_name)
+    description = property(get_description)
+    encrypted = property(get_encrypted)
 
-#print(asset2.is_asset(3))
+
+"""asset1 = Asset('hardware_patch')
+asset2 = Asset('poki')
+asset3 = Asset(3)
+
+print(asset1.is_asset())
+print(asset2.is_asset())
+print(asset3.is_asset())
+
+print(asset1.get_name, asset1.get_description, asset1.get_encrypted)
+print(asset2.get_name, asset1.get_description, asset1.get_encrypted)
+print(asset3.get_name, asset1.get_description, asset1.get_encrypted)
+"""
