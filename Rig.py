@@ -9,71 +9,44 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 """
 import re
 from random import randint
+from Asset import Asset
 
-import Asset
 import Hacker
 
 
 class Rig:
     """
     Rig class with the following attributes:
-
     +name: str
-
     -damage: int
-
     -broken: bool
+    -level: int
+    -storage: list
+    -storage_size: int
 
-    -level: int # # Using a hardware_patch, affects battles damage and amount
-    of assets stored
-
-    -storage: list # Starts with two data_spikes and one removable_drive
-
-    -storage_size: int # check if this is independent or part of the storage
-    attribute
-
-    the following methods:
+    Rig class methods:
     scan_storage: Generates a list of items contained in the Rig's
     storage including encryption status.
-
     generate_asset: Generate a random asset from the Asset module
-
     store_asset: Saves asset in Rig's storage.
-
     use_asset: Delete's asset fom Rig's storage either used in actions
     or consumed during upgrades.
-
-    transfer_asset: target_rig: str, originator_rig: str, target_rig_staus: str,
-    originator_rig_status: str # need to check staus of rig (not damaged), and
-    asset (not encrypted) update both target and originator storage lists.
-
+    transfer_asset:
     extract_asset:
-
     rig_repair: Repairs a Rig's if the Rig is damaged and a crypto_token is
     given; damage gets reset to 0 and broken status changed to False.
-
     rig_condition: Prints the condition of the Rig (0-2).
-
     rig_update: Upgrades Rig's level if a hardware_patch is given.
 
-    and the following properties:
-    name
-
-    storage
-
-    damage
-
-    broken
-
-    level
+    Properties:
+    name, storage, damage, broken, level
     """
 
-    def __init__(self, name: str) -> None:
-        self.__name = name if (name == re.search(r'[a-zA-Z]', name)
-                               or re.search(r'\d', name)) else 'Invalid name.'
+    def __init__(self, r_name: str) -> None:
+        self.r_name = r_name
         self.__storage_size = 5
-        self.__storage = [Asset.Asset('data_spike'), Asset.Asset('data_spike'),
-                          Asset.Asset('removable_drive')
+        self.__storage = [Asset.ASSET_NAMES[1], Asset.ASSET_NAMES[1],
+                          Asset.ASSET_NAMES[3]
                           ]
         self.__damage = 0
         self.__broken = False if self.__damage != 2 else True
@@ -81,29 +54,85 @@ class Rig:
 
     def __str__(self) -> str:
         # name, condition, upgrade level, stored assets
-        return f'Name: {self.__name}\nCondition: {'Operational'
+        return f'Name: {self.__r_name}\nCondition: {'Operational'
         if not self.__broken else 'Broken'}'
         # f'Stored assets:{Rig.STORAGE}')
 
-    @property
-    def get_name(self) -> str:
-        return self.__name
+    # Getters
+    def get_r_name(self) -> str:
+        return self.__r_name
 
-    @property
     def get_storage(self) -> list:
         return self.__storage
 
-    @property
     def get_damage(self) -> int:
         return self.__damage
 
-    @property
     def get_broken(self) -> bool:
         return self.__broken
 
-    @property
-    def get_level(self) -> int:
+    def get_upgrade_level(self) -> int:
         return self.__upgrade_level
+
+    # Setters
+    def set_r_name(self, r_name: str) -> None:
+        """
+        Validating rig name (letters and numbers only)
+        :param r_name: str
+        :return: None
+        """
+        if r_name == re.search(r'[a-zA-Z]', r_name) or re.search(r'\d', r_name):
+            self.__r_name = r_name
+        else:
+            print(f'Invalid name. Letters and numbers only.')
+
+    def set_storage_size(self, size: int) -> None:
+        """
+        Validating storage size with an integer between 1 - 10, if invalid
+        input the storage size is reset to a default value of 5
+        :param size: int
+        :return: None
+        """
+        if isinstance(size, int) and size > 0 and size <= 10:
+            self.__storage_size = size
+        else:
+            self.__storage_size = 5
+            print('The Rig storage size needs to be a number between 1 - 10.\n'
+                  'Rig storage size reset to 5')
+
+    def set_damage(self, damage: int) -> None:
+        """
+        Validating storage size with an integer between 0 - 2, if invalid
+        input damage is set to a default value of 0
+        :param damage: int
+        :return: None
+        """
+        if isinstance(damage, int) and damage >= 0 and damage <= 2:
+            self.__damage = damage
+        else:
+            self.__damage = 0
+            print('The damage can only be between 0 - 2.\n'
+                  'Rig damage reset to 0.')
+
+    def set_broken(self, is_broken: bool) -> None:
+        """
+        Validating broken status as boolean, if invalid input the status
+        is reset to a default value of False.
+        :param is_broken:
+        :return:
+        """
+        if isinstance(is_broken, bool):
+            self.__broken = is_broken
+        else:
+            self.__broken = False
+            print('Broken status can only be True or False.\n'
+                  'Rig broken status reset to False')
+
+    def set_upgrade_level(self) -> None:
+        if self.__damage < 2:
+            self.__damage += 1
+        else:
+            print('The Rig has maximum damage and is broken')
 
     def scan_storage(self) -> list:
         """
@@ -111,7 +140,7 @@ class Rig:
         its maximum capacity and whether the asset is encrypted or not
         :return: self.__storage
         """
-        print(f"\n{self.__name}'s storage capacity is: {self.__storage_size}")
+        print(f"\n{self.__r_name}'s storage capacity is: {self.__storage_size}")
         print(f'And contains the following assets:')
         for item in self.__storage:
             print(f'{item.get_name} ({'encrypted' if item.get_encrypted
@@ -124,8 +153,8 @@ class Rig:
         Asset module
         :return: new asset
         """
-        select = randint(0, len(Asset.Asset.types_) - 1)
-        new_asset = Asset.Asset(Asset.Asset.types_[select])
+        select = randint(0, len(Asset.asset_names) - 1)
+        new_asset = Asset.Asset(Asset.asset_names[select])
         print(f'The following asset has been created: {new_asset.get_name}')
         return new_asset
 
@@ -196,13 +225,13 @@ class Rig:
         :return: None
         """
         condition = {0: 'Pristine', 1: '50%', 2: 'Broken'}
-        print(f"\n{self.__name}'s condition is {condition[self.__damage]}")
+        print(f"\n{self.__r_name}'s condition is {condition[self.__damage]}")
         return None
 
     def rig_upgrade(self, asset) -> None:
         if asset.get_name == 'hardware_patch':
             self.__upgrade_level += 1
-            print(f"{self.__name}'s has been updated to level {self.__upgrade_level}.")
+            print(f"{self.__r_name}'s has been updated to level {self.__upgrade_level}.")
         return None
 
     # Properties
@@ -225,4 +254,5 @@ print(asset1.get_name)
 r2.rig_repair(asset1)
 r2.rig_upgrade(asset2)
 """
-r2.generate_asset()
+#r2.generate_asset()
+
