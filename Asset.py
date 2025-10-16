@@ -39,7 +39,6 @@ class Asset:
     def __init__(self, a_name: str, a_encryption=False) -> None:
         self.a_name = a_name
         self.a_encryption = a_encryption
-        self.__a_description = self.build_a_description(self.__a_name)
 
     def __str__(self) -> str:
         return (f'\nName: {self.__a_name}\n'
@@ -78,6 +77,7 @@ class Asset:
         # print(f'The identified asset names are {Asset.ASSET_NAMES}.')
         self.__a_name = a_name if a_name in Asset.ASSET_NAMES \
             else 'unidentified'
+        self.__a_description = self.build_a_description(self.__a_name)
 
     def set_a_encryption(self, status: bool) -> None:
         """
@@ -89,7 +89,7 @@ class Asset:
         if isinstance(status, bool):
             self.__a_encryption = status
         else:
-            print(f'The encryption staturs can only be True or False, updating to '
+            print(f'The encryption status can only be True or False, updating to '
                   f'default status (False)')
             self.__a_encryption = False
 
@@ -116,7 +116,6 @@ class Asset:
     def is_asset(self) -> bool:
         """
         Helper to check if object is an Asset
-        :param None
         :return: bool
         """
         return True if (isinstance(self, Asset) and self.__a_name
@@ -128,21 +127,15 @@ class Asset:
     a_encryption = property(get_a_encryption, set_a_encryption)
 
 
-asset1 = Asset('crypto_token')
+asset1 = Asset('funky')
+print(asset1)
+
 asset1.set_a_encryption(True)
+asset1.set_a_name('security_rig')
+print(asset1)
+
+print()
 print(asset1.a_name)
+print(asset1.a_description)
+print(asset1.a_encryption)
 
-"""
-asset2 = Asset('hardware_patch')
-asset3 = Asset('security_rig')
-asset4 = Asset('4')
-
-print(asset1.is_asset())
-print(asset2.is_asset())
-print(asset3.is_asset())
-print(asset4.is_asset())
-
-print(asset1.get_a_name)
-asset1.get_a_description
-asset1.get_a_encryption
-"""
