@@ -28,6 +28,9 @@ class Asset:
     Getter for description
     build_a_description: automatically assigns a description based on the name
     is_asset: to validate if it is an Asset Class
+
+    Properties:
+    a_name, a_description, a_encryption
     """
 
     # Class level attributes
