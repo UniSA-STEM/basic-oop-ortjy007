@@ -48,12 +48,24 @@ class Asset:
 
     # Getters for all instance attributes
     def get_a_name(self) -> str:
+        """
+        Get the name of the asset
+        :return: None
+        """
         return self.__a_name
 
     def get_a_description(self) -> str:
+        """
+        Get the description of the asset
+        :return: None
+        """
         return self.__a_description
 
     def get_a_encryption(self) -> bool:
+        """
+        Get the encryption status of the asset
+        :return: None
+        """
         return self.__a_encryption
 
     # Setters
@@ -69,11 +81,17 @@ class Asset:
 
     def set_a_encryption(self, status: bool) -> None:
         """
-        Set asset to encrypted or decrypted
+        Set asset to encrypted or decrypted, if input is invalid reset to
+        default value (False)
         :param status: bool
         :return: None
         """
-        self.__a_encryption = status
+        if isinstance(status, bool):
+            self.__a_encryption = status
+        else:
+            print(f'The encryption staturs can only be True or False, updating to '
+                  f'default status (False)')
+            self.__a_encryption = False
 
     def build_a_description(self, a_name: str) -> str:
         """
@@ -112,7 +130,7 @@ class Asset:
 
 asset1 = Asset('crypto_token')
 asset1.set_a_encryption(True)
-print(asset1)
+print(asset1.a_name)
 
 """
 asset2 = Asset('hardware_patch')
