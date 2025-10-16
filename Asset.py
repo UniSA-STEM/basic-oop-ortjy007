@@ -12,105 +12,119 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 class Asset:
     """
     Asset class with the following attributes:
-
-    +name: str
-
+    -name: str
     -description: str
+    -encryption=False
 
-    -encrypted=False
+   Asset Class level attributes:
+    +crypto_token: to acquire or repair rigs (H)
+    +hardware_patch: update rigs level & storage (H)
+    +data_spikes: check storage, update lists, update damage (R)
+    +removable_drive: found in rigs used for extraction (R)
+    +security_rig: used to encrypt or decrypt assets (H or R)
 
-    The following are identified Assets, no methods except getters and setters:
-
-    +crypto_token: Rig_name # to acquire or repair rigs (H)
-
-    +hardware_patch: rig_name # update rigs level & storage (H)
-
-    +data_spikes: target_rig # check storage, update lists, update damage (R)
-
-    +removable_drive: target_rig, destination_rig # found in rigs used for extraction (R)
-
-    +security_rig: asset_name # used to encrypt or decrypt assets (H or R)
-
-    ##### Extract to be deleted:
-    Assets can be moved between hacker and rig , used in actions or consumed during upgrades
-    Representing digital assets can be moved between Hacker's inventory and
-    their Rig's storage. Are used in actions or consumed during upgrades.
+    Asset Class methods:
+    Setters and Getters for name and encryption instance attributes
+    Getter for description
+    build_a_description: automatically assigns a description based on the name
+    is_asset: to validate if it is an Asset Class
     """
 
+    # Class level attributes
+    ASSET_NAMES = ['crypto_token', 'hardware_patch', 'data_spike',
+                   'removable_drive', 'security_rig'
+                   ]
+
     # Defining Asset Class, name, description and encryption status.
-    def __init__(self, type_: str) -> None:
-        self.__type_ = type_
-
-        Asset.types_ = ['crypto_token', 'hardware_patch', 'data_spike',
-                        'removable_drive', 'security_rig'
-                        ]
-
-        if type_ == 'crypto_token':
-            self.__description = 'Used to acquire or repair rigs.(H)'
-        elif type_ == 'hardware_patch':
-            self.__description = 'Used to update rigs -level & storage-.(H)'
-        elif type_ == 'data_spike':
-            self.__description = 'Used in battles to damage rigs.(R)'
-        elif type_ == 'removable_drive':
-            self.__description = 'Found in rigs and used for extraction.(R)'
-        elif type_ == 'security_rig':
-            self.__description = 'Used to encrypt or decrypt assets.(H/R)'
-        else:
-            self.__description = 'Unidentified asset.'
-
-        self.__name = type_ if type_ in Asset.types_ else 'unidentified'
-        self.__encrypted = False
+    def __init__(self, a_name: str, a_encryption=False) -> None:
+        self.a_name = a_name
+        self.a_encryption = a_encryption
+        self.__a_description = self.build_a_description(self.__a_name)
 
     def __str__(self) -> str:
-        return (f'\nType: {self.__name}\n'
-                f'Description: {self.__description}\n'
-                f'Encrypted: {self.__encrypted}')
+        return (f'\nName: {self.__a_name}\n'
+                f'Description: {self.__a_description}\n'
+                f'Encryption: {self.__a_encryption}')
 
-    @property
-    def get_name(self) -> str:
-        return self.__name
+    # Getters for all instance attributes
+    def get_a_name(self) -> str:
+        return self.__a_name
 
-    @property
-    def get_description(self) -> str:
-        return self.__description
+    def get_a_description(self) -> str:
+        return self.__a_description
 
-    @property
-    def get_encrypted(self) -> bool:
-        return self.__encrypted
+    def get_a_encryption(self) -> bool:
+        return self.__a_encryption
 
     # Setters
-    def set_encrypted(self, status: bool) -> bool:
+    def set_a_name(self, a_name: str) -> None:
+        """
+        Validating name against the given Class level asset list
+        :param a_name: str
+        :return: None
+        """
+        # print(f'The identified asset names are {Asset.ASSET_NAMES}.')
+        self.__a_name = a_name if a_name in Asset.ASSET_NAMES \
+            else 'unidentified'
+
+    def set_a_encryption(self, status: bool) -> None:
         """
         Set asset to encrypted or decrypted
         :param status: bool
-        :return: self.__encrypted
+        :return: None
         """
-        self.__encrypted = status
-        return self.__encrypted
+        self.__a_encryption = status
+
+    def build_a_description(self, a_name: str) -> str:
+        """
+        Matching asset name to description, if not found declared 'Unidentified asset'
+        :param a_name: str
+        :return: self.a_description
+        """
+        if a_name == 'crypto_token':
+            self.__a_description = 'Used to acquire or repair rigs.(H)'
+        elif a_name == 'hardware_patch':
+            self.__a_description = 'Used to update rigs -level & storage-.(H)'
+        elif a_name == 'data_spike':
+            self.__a_description = 'Used in battles to damage rigs.(R)'
+        elif a_name == 'removable_drive':
+            self.__a_description = 'Found in rigs and used for extraction.(R)'
+        elif a_name == 'security_rig':
+            self.__a_description = 'Used to encrypt or decrypt assets.(H/R)'
+        else:
+            self.__a_description = 'Unidentified asset.'
+        return self.a_description
 
     def is_asset(self) -> bool:
         """
         Helper to check if object is an Asset
-        :param item:
+        :param None
         :return: bool
         """
-        return True if isinstance(self, Asset) and self.__name in Asset.types_ else False
+        return True if (isinstance(self, Asset) and self.__a_name
+                        in Asset.ASSET_NAMES) else False
 
-    # Properties
-    name = property(get_name)
-    description = property(get_description)
-    encrypted = property(get_encrypted)
+    # Properties for instance attributes
+    a_name = property(get_a_name, set_a_name)
+    a_description = property(get_a_description)
+    a_encryption = property(get_a_encryption, set_a_encryption)
 
 
-"""asset1 = Asset('hardware_patch')
-asset2 = Asset('poki')
-asset3 = Asset(3)
+asset1 = Asset('crypto_token')
+asset1.set_a_encryption(True)
+print(asset1)
+
+"""
+asset2 = Asset('hardware_patch')
+asset3 = Asset('security_rig')
+asset4 = Asset('4')
 
 print(asset1.is_asset())
 print(asset2.is_asset())
 print(asset3.is_asset())
+print(asset4.is_asset())
 
-print(asset1.get_name, asset1.get_description, asset1.get_encrypted)
-print(asset2.get_name, asset1.get_description, asset1.get_encrypted)
-print(asset3.get_name, asset1.get_description, asset1.get_encrypted)
+print(asset1.get_a_name)
+asset1.get_a_description
+asset1.get_a_encryption
 """
