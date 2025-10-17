@@ -8,6 +8,7 @@ Username: ortjy007
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
+
 class Asset:
     """
     Asset Class representing digital assets.
@@ -22,13 +23,14 @@ class Asset:
     +name @property getter + setter
     +encrypted @property getter + setter
     +description @property getter + setter
+    +equality (same asset)
     """
 
     # Class level attributes
-    ENCRYPTED = False # set as default for all instances
+    ENCRYPTED = False  # set as default for all instances
     ASSET_NAMES = ['crypto_token', 'hardware_patch', 'data_spike',
                    'removable_drive', 'security_rig'
-                   ] # current list of assets
+                   ]  # current list of assets
 
     def __init__(self, name: str):
         """
@@ -126,20 +128,13 @@ class Asset:
         else:
             self.__description = 'Unidentified asset.'
 
-
-"""
-asset1 = Asset('hardware_patch')
-print('1', asset1.name, '\n')
-
-asset1.name = 'security_rig'
-print('2', asset1.name, '\n')
-
-print('3', asset1.encrypted, '\n')
-
-asset1.encrypted = False
-print('4', asset1.encrypted, '\n')
-
-print('5', asset1.description)
-
-print(asset1)
-"""
+    def __eq__(self, other):
+        """
+        Testing for Asset equality
+        :param other: instance
+        :return: str
+        """
+        if isinstance(other, Asset):
+            return self.__name == other.__name
+        else:
+            return 'Not equal Assets'
