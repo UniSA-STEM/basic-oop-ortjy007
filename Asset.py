@@ -42,15 +42,15 @@ class Asset:
         self.encrypted = Asset.ENCRYPTED
         self.description = name
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Values and format as requested in the specification.
         :return: str
         """
         if self.encrypted:
-            return f'<{self.__name}>:<{self.__description}> [Encrypted]'
+            return f'{self.__name}:{self.__description} [Encrypted]'
         else:
-            return f'<{self.__name}>:<{self.__description}>'
+            return f'{self.__name}:{self.__description}'
 
     @property
     def name(self) -> str:
@@ -59,6 +59,22 @@ class Asset:
         :return: str
         """
         return self.__name
+
+    @property
+    def encrypted(self) -> bool:
+        """
+        Encrypted function w/ property decorator as getter.
+        :return: bool
+        """
+        return self.__encrypted
+
+    @property
+    def description(self) -> str:
+        """
+        Description function w/ property decorator as getter.
+        :return: str
+        """
+        return self.__description
 
     @name.setter
     def name(self, value) -> None:
@@ -76,14 +92,6 @@ class Asset:
             print('Invalid input, default name used')
             self.__name = 'default_asset'
 
-    @property
-    def encrypted(self) -> bool:
-        """
-        Encrypted function w/ property decorator as getter.
-        :return: bool
-        """
-        return self.__encrypted
-
     @encrypted.setter
     def encrypted(self, value) -> None:
         """
@@ -98,14 +106,6 @@ class Asset:
         else:
             print('Invalid input, default False value used.')
             self.__encrypted = False
-
-    @property
-    def description(self) -> str:
-        """
-        Description function w/ property decorator as getter.
-        :return: str
-        """
-        return self.__description
 
     @description.setter
     def description(self, value) -> None:
