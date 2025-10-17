@@ -10,8 +10,7 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 import re
 from random import randint
 from Asset import Asset
-
-import Hacker
+from Hacker import Hacker
 
 
 class Rig:
@@ -42,15 +41,15 @@ class Rig:
     name, storage, damage, broken, level
     """
 
-    def __init__(self, r_name: str) -> None:
+    def __init__(self, r_name: str, damage=0, broken=False) -> None:
         self.r_name = r_name
-        self.__storage_size = 5
+        self.storage_size = 5
         self.__storage = [Asset.ASSET_NAMES[1], Asset.ASSET_NAMES[1],
                           Asset.ASSET_NAMES[3]
                           ]
-        self.__damage = 0
-        self.__broken = False if self.__damage != 2 else True
-        self.__upgrade_level = 0
+        self.damage = damage
+        self.broken = broken
+        self.upgrade_level = 0
 
     def __str__(self) -> str:
         # name, condition, upgrade level, stored assets
@@ -60,18 +59,45 @@ class Rig:
 
     # Getters
     def get_r_name(self) -> str:
+        """
+        Get Rig's name
+        :return: str
+        """
         return self.__r_name
 
+    def get_storage_size(self) -> int:
+        """
+        Get the Rig's storge size
+        :return: int
+        """
+        return self.__storage_size
+
     def get_storage(self) -> list:
+        """
+        Get assets in storage
+        :return: list
+        """
         return self.__storage
 
     def get_damage(self) -> int:
+        """"
+        Get Rig's damage level
+        :return: list
+        """
         return self.__damage
 
     def get_broken(self) -> bool:
+        """
+        Get the status of the Rig
+        :return: bool
+        """
         return self.__broken
 
     def get_upgrade_level(self) -> int:
+        """
+        Get the upgrade level of the Rig
+        :return: int
+        """
         return self.__upgrade_level
 
     # Setters
@@ -93,7 +119,7 @@ class Rig:
         :param size: int
         :return: None
         """
-        if isinstance(size, int) and size > 0 and size <= 10:
+        if isinstance(size, int) and 0 < size <= 10:
             self.__storage_size = size
         else:
             self.__storage_size = 5
@@ -107,7 +133,7 @@ class Rig:
         :param damage: int
         :return: None
         """
-        if isinstance(damage, int) and damage >= 0 and damage <= 2:
+        if isinstance(damage, int) and 0 <= damage <= 2:
             self.__damage = damage
         else:
             self.__damage = 0
@@ -128,11 +154,14 @@ class Rig:
             print('Broken status can only be True or False.\n'
                   'Rig broken status reset to False')
 
-    def set_upgrade_level(self) -> None:
-        if self.__damage < 2:
-            self.__damage += 1
-        else:
-            print('The Rig has maximum damage and is broken')
+    def set_upgrade_level(self, new_level=1) -> None:
+        """
+        Rig upgrade by 1 level
+        :param new_level: int
+        :return: None
+        """
+        self.__upgrade_level = new_level
+        print(f'Rig upgraded one level to {self.__upgrade_level}.')
 
     def scan_storage(self) -> list:
         """
@@ -235,11 +264,12 @@ class Rig:
         return None
 
     # Properties
-    name = property(get_name)
+    r_name = property(get_r_name, set_r_name)
+    storage_size = property(get_storage_size, set_storage_size)
     storage = property(get_storage)
-    damage = property(get_damage)
-    broken = property(get_broken)
-    level = property(get_level)
+    damage = property(get_damage, set_damage)
+    broken = property(get_broken, set_broken)
+    upgrade_level = property(get_upgrade_level, set_upgrade_level)
 
 
 r2 = Rig('r2')
