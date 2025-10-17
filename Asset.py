@@ -8,137 +8,138 @@ Username: ortjy007
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
-
 class Asset:
     """
-    Asset class with the following attributes:
+    Asset Class representing digital assets.
+    Class level attributes:
+    -ENCRYPTED: bool
+    -ASSET_NAMES: list
+    Instance level attributes:
     -name: str
+    -encrypted: bool
     -description: str
-    -encryption=False
-
-   Asset Class level attributes:
-    +crypto_token: to acquire or repair rigs (H)
-    +hardware_patch: update rigs level & storage (H)
-    +data_spikes: check storage, update lists, update damage (R)
-    +removable_drive: found in rigs used for extraction (R)
-    +security_rig: used to encrypt or decrypt assets (H or R)
-
-    Asset Class methods:
-    Setters and Getters for name and encryption instance attributes
-    Getter for description
-    build_a_description: automatically assigns a description based on the name
-    is_asset: to validate if it is an Asset Class
-
-    Properties:
-    a_name, a_description, a_encryption
+    Methods w/decorators:
+    +name @property getter + setter
+    +encrypted @property getter + setter
+    +description @property getter + setter
     """
 
     # Class level attributes
+    ENCRYPTED = False # set as default for all instances
     ASSET_NAMES = ['crypto_token', 'hardware_patch', 'data_spike',
                    'removable_drive', 'security_rig'
-                   ]
+                   ] # current list of assets
 
-    # Defining Asset Class, name, description and encryption status.
-    def __init__(self, a_name: str, a_encryption=False) -> None:
-        self.a_name = a_name
-        self.a_encryption = a_encryption
+    def __init__(self, name: str):
+        """
+        Constructor method, the name attribute serves as both name and
+        to select the corresponding description.
+        :param name: str
+        """
+        self.name = name
+        self.encrypted = Asset.ENCRYPTED
+        self.description = name
 
-    def __str__(self) -> str:
-        return (f'\nName: {self.__a_name}\n'
-                f'Description: {self.__a_description}\n'
-                f'Encryption: {self.__a_encryption}')
-
-    # Getters for all instance attributes
-    def get_a_name(self) -> str:
+    def __str__(self):
         """
-        Get the name of the asset
-        :return: None
+        Values and format as requested in the specification.
+        :return: str
         """
-        return self.__a_name
-
-    def get_a_description(self) -> str:
-        """
-        Get the description of the asset
-        :return: None
-        """
-        return self.__a_description
-
-    def get_a_encryption(self) -> bool:
-        """
-        Get the encryption status of the asset
-        :return: None
-        """
-        return self.__a_encryption
-
-    # Setters
-    def set_a_name(self, a_name: str) -> None:
-        """
-        Validating name against the given Class level asset list
-        :param a_name: str
-        :return: None
-        """
-        # print(f'The identified asset names are {Asset.ASSET_NAMES}.')
-        self.__a_name = a_name if a_name in Asset.ASSET_NAMES \
-            else 'unidentified'
-        self.__a_description = self.build_a_description(self.__a_name)
-
-    def set_a_encryption(self, status: bool) -> None:
-        """
-        Set asset to encrypted or decrypted, if input is invalid reset to
-        default value (False)
-        :param status: bool
-        :return: None
-        """
-        if isinstance(status, bool):
-            self.__a_encryption = status
+        if self.encrypted:
+            return f'<{self.__name}>:<{self.__description}> [Encrypted]'
         else:
-            print(f'The encryption status can only be True or False, updating to '
-                  f'default status (False)')
-            self.__a_encryption = False
+            return f'<{self.__name}>:<{self.__description}>'
 
-    def build_a_description(self, a_name: str) -> str:
+    @property
+    def name(self) -> str:
         """
-        Matching asset name to description, if not found declared 'Unidentified asset'
-        :param a_name: str
-        :return: self.a_description
+        Name function w/ property decorator as getter.
+        :return: str
         """
-        if a_name == 'crypto_token':
-            self.__a_description = 'Used to acquire or repair rigs.(H)'
-        elif a_name == 'hardware_patch':
-            self.__a_description = 'Used to update rigs -level & storage-.(H)'
-        elif a_name == 'data_spike':
-            self.__a_description = 'Used in battles to damage rigs.(R)'
-        elif a_name == 'removable_drive':
-            self.__a_description = 'Found in rigs and used for extraction.(R)'
-        elif a_name == 'security_rig':
-            self.__a_description = 'Used to encrypt or decrypt assets.(H/R)'
+        return self.__name
+
+    @name.setter
+    def name(self, value) -> None:
+        """
+        Name method with setter decorator validating name against
+        the list of given assets. If invalid input is given a default
+        name is given to the asset.
+        :param value: str
+        :return: None
+        """
+        if isinstance(value, str) and value in Asset.ASSET_NAMES:
+            print(f'{value} asset created.')
+            self.__name = value
         else:
-            self.__a_description = 'Unidentified asset.'
-        return self.a_description
+            print('Invalid input, default name used')
+            self.__name = 'default_asset'
 
-    def is_asset(self) -> bool:
+    @property
+    def encrypted(self) -> bool:
         """
-        Helper to check if object is an Asset
+        Encrypted function w/ property decorator as getter.
         :return: bool
         """
-        return True if (isinstance(self, Asset) and self.__a_name
-                        in Asset.ASSET_NAMES) else False
+        return self.__encrypted
 
-    # Properties for instance attributes
-    a_name = property(get_a_name, set_a_name)
-    a_description = property(get_a_description)
-    a_encryption = property(get_a_encryption, set_a_encryption)
+    @encrypted.setter
+    def encrypted(self, value) -> None:
+        """
+        Encrypted method validated as boolean. If invalid input is
+        given a default the False value is given to the asset.
+        :param value: bool
+        :return: None
+        """
+        if isinstance(value, bool):
+            print(f'Encrypted value set to {value}')
+            self.__encrypted = value
+        else:
+            print('Invalid input, default False value used.')
+            self.__encrypted = False
+
+    @property
+    def description(self) -> str:
+        """
+        Description function w/ property decorator as getter.
+        :return: str
+        """
+        return self.__description
+
+    @description.setter
+    def description(self, value) -> None:
+        """
+        Matching asset name to description from specification document,
+        if the name does not match is declared as an 'Unidentified asset'.
+        :param value: str
+        :return: None
+        """
+        if value == 'crypto_token':
+            self.__description = 'Used to acquire or repair rigs.(H)'
+        elif value == 'hardware_patch':
+            self.__description = 'Used to update rigs -level & storage-.(H)'
+        elif value == 'data_spike':
+            self.__description = 'Used in battles to damage rigs.(R)'
+        elif value == 'removable_drive':
+            self.__description = 'Found in rigs and used for extraction.(R)'
+        elif value == 'security_rig':
+            self.__description = 'Used to encrypt or decrypt assets.(H/R)'
+        else:
+            self.__description = 'Unidentified asset.'
 
 
-asset1 = Asset('funky')
+"""
+asset1 = Asset('hardware_patch')
+print('1', asset1.name, '\n')
+
+asset1.name = 'security_rig'
+print('2', asset1.name, '\n')
+
+print('3', asset1.encrypted, '\n')
+
+asset1.encrypted = False
+print('4', asset1.encrypted, '\n')
+
+print('5', asset1.description)
+
 print(asset1)
-
-asset1.set_a_encryption(True)
-asset1.set_a_name('security_rig')
-print(asset1)
-
-print()
-print(asset1.a_name)
-print(asset1.a_description)
-print(asset1.a_encryption)
-
+"""
