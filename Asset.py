@@ -23,7 +23,6 @@ class Asset:
     +name @property getter + setter
     +encrypted @property getter + setter
     +description @property getter + setter
-    +equality (same asset)
     """
 
     # Class level attributes
@@ -42,15 +41,15 @@ class Asset:
         self.encrypted = Asset.ENCRYPTED
         self.description = name
 
-    def __str__(self) -> str:
+    def __str__(self):
         """
         Values and format as requested in the specification.
         :return: str
         """
         if self.encrypted:
-            return f'{self.__name}:{self.__description} [Encrypted]'
+            return f'<{self.__name}>:<{self.__description}> [Encrypted]'
         else:
-            return f'{self.__name}:{self.__description}'
+            return f'<{self.__name}>:<{self.__description}>'
 
     @property
     def name(self) -> str:
@@ -60,6 +59,22 @@ class Asset:
         """
         return self.__name
 
+    @name.setter
+    def name(self, a_name: str) -> None:
+        """
+        Name method with setter decorator validating name against
+        the list of given assets. If invalid input is given a default
+        name is given to the asset.
+        :param value: str
+        :return: None
+        """
+        if isinstance(a_name, str) and a_name in Asset.ASSET_NAMES:
+            print(f'{a_name} asset created.')
+            self.__name = a_name
+        else:
+            print('Invalid input, default name used')
+            self.__name = 'default_asset'
+
     @property
     def encrypted(self) -> bool:
         """
@@ -67,6 +82,21 @@ class Asset:
         :return: bool
         """
         return self.__encrypted
+
+    @encrypted.setter
+    def encrypted(self, enc: bool) -> None:
+        """
+        Encrypted method validated as boolean. If invalid input is
+        given a default the False value is given to the asset.
+        :param value: bool
+        :return: None
+        """
+        if isinstance(enc, bool):
+            print(f'Encrypted value set to {enc}')
+            self.__encrypted = enc
+        else:
+            print('Invalid input, default False value used.')
+            self.__encrypted = False
 
     @property
     def description(self) -> str:
@@ -76,54 +106,23 @@ class Asset:
         """
         return self.__description
 
-    @name.setter
-    def name(self, value) -> None:
-        """
-        Name method with setter decorator validating name against
-        the list of given assets. If invalid input is given a default
-        name is given to the asset.
-        :param value: str
-        :return: None
-        """
-        if isinstance(value, str) and value in Asset.ASSET_NAMES:
-            print(f'{value} asset created.')
-            self.__name = value
-        else:
-            print('Invalid input, default name used')
-            self.__name = 'default_asset'
-
-    @encrypted.setter
-    def encrypted(self, value) -> None:
-        """
-        Encrypted method validated as boolean. If invalid input is
-        given a default the False value is given to the asset.
-        :param value: bool
-        :return: None
-        """
-        if isinstance(value, bool):
-            print(f'Encrypted value set to {value}')
-            self.__encrypted = value
-        else:
-            print('Invalid input, default False value used.')
-            self.__encrypted = False
-
     @description.setter
-    def description(self, value) -> None:
+    def description(self, info: int) -> None:
         """
         Matching asset name to description from specification document,
         if the name does not match is declared as an 'Unidentified asset'.
         :param value: str
         :return: None
         """
-        if value == 'crypto_token':
+        if info == 'crypto_token':
             self.__description = 'Used to acquire or repair rigs.(H)'
-        elif value == 'hardware_patch':
+        elif info == 'hardware_patch':
             self.__description = 'Used to update rigs -level & storage-.(H)'
-        elif value == 'data_spike':
+        elif info == 'data_spike':
             self.__description = 'Used in battles to damage rigs.(R)'
-        elif value == 'removable_drive':
+        elif info == 'removable_drive':
             self.__description = 'Found in rigs and used for extraction.(R)'
-        elif value == 'security_rig':
+        elif info == 'security_rig':
             self.__description = 'Used to encrypt or decrypt assets.(H/R)'
         else:
             self.__description = 'Unidentified asset.'
