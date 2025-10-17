@@ -65,7 +65,7 @@ class Asset:
         Name method with setter decorator validating name against
         the list of given assets. If invalid input is given a default
         name is given to the asset.
-        :param value: str
+        :param a_name: str
         :return: None
         """
         if isinstance(a_name, str) and a_name in Asset.ASSET_NAMES:
@@ -88,7 +88,7 @@ class Asset:
         """
         Encrypted method validated as boolean. If invalid input is
         given a default the False value is given to the asset.
-        :param value: bool
+        :param enc: bool
         :return: None
         """
         if isinstance(enc, bool):
@@ -111,7 +111,7 @@ class Asset:
         """
         Matching asset name to description from specification document,
         if the name does not match is declared as an 'Unidentified asset'.
-        :param value: str
+        :param info: str
         :return: None
         """
         if info == 'crypto_token':
