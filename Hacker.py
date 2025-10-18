@@ -8,104 +8,117 @@ Username: ortjy007
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 import re
+from Rig import Rig
+from Asset import Asset
+
 
 class Hacker:
     """
     Hacker represents a person (with a cryptic and/or stylish pseudonym) who
     uses computers to gain unauthorized access to data.
-    Hacker class with the following attributes:
+
+    Instance attributes:
     +name: str
     -exposed: bool
     -trace_level: int
     -inventory: []
 
+    Methods w/decorators:
+    +name @property getter + setter
+    +encrypted @property getter + setter
+    +description @property getter + setter
+
     And the following methods:
-    acquire_rig: Rig_name # linked to Hacker?
-    launch_data_spikes: target_rig  # same as launch attack?? consumes data
-        spike from own storage
-    extract_asset: target_rig, asset_names # only if the rig is broken and the
+    Acquiring_rig: Rig_name # linked to Hacker?
+    Launching_data_spikes: target_rig  # same as launch attack?? consumes data
+    spike from own storage
+    Extracting_asset: target_rig, asset_names # only if the rig is broken and the
         assets are unsecured (non encrypted) assets (all of them) and consumes
         a movable drive, transfers assets to own storage
-    encrypt_asset: asset_name, security_chip # done inside their inventory or
+    Encrypting_asset: asset_name, security_chip # done inside their inventory or
         Rig's storage, check security chip first, update storage. Encrypted
         assets can not be transferred.
-    decrypt_asset: asset_name
-    store_asset: storage_name # check capacity
-    retrieve_asset: storage_name(Rig), inventory(Hacker), asset_name # update
+    Decrypting_asset: asset_name
+    Storing_asset: storage_name # check capacity
+    Retrieving_asset: storage_name(Rig), inventory(Hacker), asset_name # update
         inventory or Rig storage
-    scan_inventory: #identify assents, quantity, status (encrypted/decrypted)
-
-    General functionality:
-    _trace levels increase when performing risky actions like launching attacks
-    or transferring sensitive assets
-    _if trave levels exceeds 5 the hacker becomes exposed and certain actions
-    are blocked until levels decrease
-
-    String conversion method included: hackers name, rig name, trace level
-    and inventory contents
-    The inventory and Rig's storage are different lists
+    Scanning_inventory: #identify assents, quantity, status (encrypted/decrypted)
     """
 
-    def __init__(self, name: str ) -> None:
-        self.__name = name if (name == re.search(r'[a-zA-Z]', name)
-                               or re.search(r'\d', name)) else 'Invalid name.'
-        self.__inventory = []
-        self.__trace_level = 0
-        self.__exposed = False
+    def __init__(self, name: str):
+        self.name = name
+        self.trace_level = 0
+        self.exposed = False
+        self.inventory = []
+
+        # pass in or instatiate an acquire Rig method
 
     def __str__(self) -> str:
-        return f'{self.__name}\nRig name:{Asset.get_name}\nInventory:{self.__inventory}'
+        return f'{self.__name}\nRig name:{Asset.__get_asset_name}\nInventory:{self.__inventory}'
 
-    # Getters
-    def get_name(self) -> str:
+    @property
+    def name(self) -> str:
+        """Name property"""
         return self.__name
 
-    def get_trace_level(self) -> int:
+    @name.setter
+    def name(self, s_name: str) -> None:
+        self.__name = s_name if (s_name == re.search(r'[a-zA-Z]', s_name)
+                                 or re.search(r'\d', s_name)) else 'Invalid name.'
+
+    @property
+    def trace_level(self) -> int:
+        """trace_level property"""
         return self.__trace_level
 
-    def get_exposed(self) -> bool:
+    @trace_level.setter
+    def trace_level(self, s_trace_level: int) -> None:
+        self.__trace_level = s_trace_level
+
+    @property
+    def exposed(self) -> bool:
+        """exposed property"""
         return self.__exposed
 
-    # Setters
-    def set_name(self) -> str:
-        return self.__name
+    @exposed.setter
+    def exposed(self, s_exposed: bool) -> None:
+        self.__exposed = s_exposed
 
-    def set_trace_level(self) -> int:
-        return self.__trace_level
+    @property
+    def inventory(self) -> list:
+        """inventory property"""
+        return self.__inventory
 
-    def set_exposed(self) -> bool:
-        return self.__exposed
+    @inventory.setter
+    def inventory(self, s_inventory: list) -> None:
+        self.__inventory = s_inventory
 
-    # Properties
-    name = property (set_name, get_name)
-    trace_level = property (get_trace_level, set_trace_level)
-    exposed = property(get_exposed, set_exposed)
-
-    def acquire_rig(self) -> str:
+    # Class Methods
+    def acquiring_rig(self) -> str:
         # print message announcing activation
         pass
 
-    def launch_data_spikes(self) -> str:
+    def launching_data_spikes(self) -> str:
         # consumes data spikes from their rigs storage
         pass
 
-    def extract_asset(self) -> str:
+    def extracting_asset(self) -> str:
         pass
 
-    def encrypt_asset(self, security_chip) -> bool:
+    def encrypting_asset(self, security_chip) -> bool:
         pass
 
-    def decrypt_asset(self, security_chip) -> bool:
+    def decrypting_asset(self, security_chip) -> bool:
         pass
 
-    def store_asset(self, asset_name: str) -> list:
+    def storing_asset(self, asset_name: str) -> list:
         # between inventory and rigs storage
         pass
 
-    def retrieve_asset(self, asset_name: str) -> str:
+    def retrieving_asset(self, asset_name: str) -> str:
         # between inventory and rigs storage
         pass
 
-    def scan_inventory(self, inventory: list) -> list:
+    def scanning_inventory(self, inventory: list) -> list:
         # by name and returning if found
         pass
