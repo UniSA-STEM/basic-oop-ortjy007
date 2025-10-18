@@ -68,9 +68,7 @@ class Rig:
         :return: str
         """
         # Extracting the names of the assets into a temp list
-        tmp_list = []
-        for item in self.__storage:
-            tmp_list.append(item.name)
+        tmp_list = [item.name for item in self.__storage]
 
         # The negative number in upgrade is because the value of
         # the upgrades is negative to offset the positive value
@@ -185,14 +183,12 @@ class Rig:
 
         return_list = []
         for item in self.__storage:
-            if not item.encryped:
-                return_list.append(item)
+            if not item.encrypted:
+                return_list.append(item.name)
                 self.__storage.remove(item)
 
         # Creating a list of name of the remaining items in storage
         tmp_list = [item.name for item in self.__storage]
-        for item in self.__storage:
-            tmp_list.append(item.name)
 
         print(f'The following assets have been released', return_list)
         print(f'Remaining encrypted assets remain:', tmp_list)
@@ -264,3 +260,7 @@ class Rig:
         new_asset = Asset.Asset(Asset.Asset.ASSET_NAMES[select])
         print(f'\nA {new_asset.name} has been randomly created.')
         return new_asset
+
+r1 = Rig('r1')
+print(r1)
+r1.releasing_all_assets()
