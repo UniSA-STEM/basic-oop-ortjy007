@@ -24,7 +24,8 @@ class Rig:
     -damage: int
     -broken: bool
     -condition: int
-    -storage: list
+    -storage: list (starts with the following Assets:
+    data_spikes x2, encrypted_drive)
 
     Methods w/decorators:
     +name @property getter + setter
@@ -57,7 +58,8 @@ class Rig:
         self.damage = 0
         self.broken = False
         self.condition = 0
-        self.storage = []
+        self.storage = [Asset.Asset('data_spike'),Asset.Asset('data_spike'),
+                        Asset.Asset('encrypted_drive')]
 
     def __str__(self):
         """
@@ -188,7 +190,7 @@ class Rig:
                 self.__storage.remove(item)
 
         # Creating a list of name of the remaining items in storage
-        tmp_list = []
+        tmp_list = [item.name for item in self.__storage]
         for item in self.__storage:
             tmp_list.append(item.name)
 
