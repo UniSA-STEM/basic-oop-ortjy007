@@ -8,9 +8,9 @@ Username: ortjy007
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
-import Asset
+from Asset import Asset
 from random import randint
-
+from Hacker import Hacker
 
 class Rig:
     """
@@ -57,8 +57,8 @@ class Rig:
         self.damage = 0
         self.broken = False
         self.condition = 0
-        self.storage = [Asset.Asset('data_spike'), Asset.Asset('data_spike'),
-                        Asset.Asset('removable_drive')]
+        self.storage = [Asset('data_spike'), Asset('data_spike'),
+                        Asset('removable_drive')]
 
     def __str__(self):
         """
@@ -131,7 +131,7 @@ class Rig:
         :param asset: Asset
         :return:
         """
-        if isinstance(asset, Asset.Asset) and asset.encrypted != True:
+        if isinstance(asset, Asset) and asset.encrypted != True:
             self.__storage.append(asset)
 
             # Extracting the names and encryption status of the assets
@@ -158,11 +158,11 @@ class Rig:
         # Validating the asset name against the valid assets, check that
         # is not encrypted, copying it to a holding variable and deleting
         # from the Rig's storage. Return the asset on the holding variable.
-        if asset_name in Asset.Asset.ASSET_NAMES:
+        if asset_name in Asset.ASSET_NAMES:
             for item in self.__storage:
                 if item.name == asset_name and item.encrypted != True:
                     return_asset = item
-            if isinstance(return_asset, Asset.Asset):
+            if isinstance(return_asset, Asset):
                 self.__storage.remove(return_asset)
                 print(f'{asset_name} released from storage.')
             else:
@@ -201,7 +201,7 @@ class Rig:
         :param asset: 'hardware patch'
         :return:
         """
-        if isinstance(asset, Asset.Asset) and asset.name == 'hardware_patch':
+        if isinstance(asset, Asset) and asset.name == 'hardware_patch':
             self.__condition -= 1
             if self.__condition < -2:
                 self.__condition = -2
@@ -218,7 +218,7 @@ class Rig:
         :param asset:
         :return:
         """
-        if isinstance(asset, Asset.Asset) and asset.name == 'data_spike':
+        if isinstance(asset, Asset) and asset.name == 'data_spike':
             if -2 >= self.__condition < 0:
                 self.__damage += .5
             elif self.__condition >= 0:
@@ -241,7 +241,7 @@ class Rig:
         """
         if self.__condition >= 0:
             print(f'{self.__name} is not damaged, no repairs done.')
-        elif isinstance(asset, Asset.Asset) and asset.name == 'crypto_token':
+        elif isinstance(asset, Asset) and asset.name == 'crypto_token':
             self.__damage = 0
             self.__broken = False
             print(f'{self.__name} has been repaired and it is Pristine with '
@@ -255,7 +255,7 @@ class Rig:
         in the Asset module.
         :return: new_asset: Asset
         """
-        select = randint(0, len(Asset.Asset.ASSET_NAMES) - 1)
-        new_asset = Asset.Asset(Asset.Asset.ASSET_NAMES[select])
+        select = randint(0, len(Asset.ASSET_NAMES) - 1)
+        new_asset = Asset.(Asset.ASSET_NAMES[select])
         print(f'\nA {new_asset.name} has been randomly created.')
         return new_asset

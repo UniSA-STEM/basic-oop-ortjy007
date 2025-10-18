@@ -8,8 +8,8 @@ Username: ortjy007
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 import re
-import Rig
-import Asset
+from Rig import Rig
+from Asset import Asset
 
 
 class Hacker:
@@ -60,7 +60,7 @@ class Hacker:
         self.name = name
         self.trace_level = 0
         self.exposed = False
-        self.inventory = [Asset.Asset('crypto_token')]
+        self.inventory = [Asset('crypto_token')]
         self.rig = rig
 
         # Retrieving initial crypto token from inventory
@@ -70,7 +70,7 @@ class Hacker:
         # Hacker.acquiring_rig(Hacker, 'r2', token_for_rig)
 
     def __str__(self) -> str:
-        return f'{self.__name}\nRig name:{Asset.Asset.name}\nInventory:{self.__inventory}'
+        return f'{self.__name}\nRig name:{Asset.name}\nInventory:{self.__inventory}'
 
     @property
     def name(self) -> str:
@@ -130,8 +130,8 @@ class Hacker:
         if not self.__rig:
             if Hacker.scanning_inventory('crypto_token'):
                 Hacker.USED_ASSETS.append(Hacker.retrieving_asset('crypto_token'))
-                self.__inventory.remove(Asset.Asset.name == 'crypto_token')
-                self.__rig = Rig.Rig(r_name)
+                self.__inventory.remove(Asset.name == 'crypto_token')
+                self.__rig = Rig(r_name)
                 print(f'{r_name} Rig has been acquired and is operational.')
             else:
                 print('Acquiring a Rig can only be done using a valid '
@@ -147,8 +147,8 @@ class Hacker:
         :return: bool
         """
         found_asset = False
-        if asset_name in Asset.Asset.ASSET_NAMES:
-            inventory = [Asset.Asset.name for Asset.Asset in self.__inventory]
+        if asset_name in Asset.ASSET_NAMES:
+            inventory = [Asset.name for Asset.Asset in self.__inventory]
             if asset_name in inventory:
                 found_asset = True
                 print(f'{asset_name} found.')
@@ -166,7 +166,7 @@ class Hacker:
         :param asset: Asset
         :return:
         """
-        if isinstance(asset, Asset.Asset) and asset.encrypted != True:
+        if isinstance(asset, Asset) and asset.encrypted != True:
             self.__inventory.append(asset)
 
             # Extracting the names and encryption status of the assets
@@ -202,7 +202,7 @@ class Hacker:
         :param target: Hacker
         :return: None
         """
-        # Temp list to hold the names of extracted asets
+        # Temp list to hold the names of extracted assets
         e_asset = []
 
         if self.__rig is None:
@@ -210,12 +210,12 @@ class Hacker:
         elif self.__exposed:
             print("Your can't extract assets while exposed.")
         elif isinstance(target, Hacker):
-            if target.Rig.Rig.broken:
-                for item in target.Rig.Rig.storage:
+            if target.Rig.broken:
+                for item in target.Rig.storage:
                     if not item.encrypted:
                         self.__inventory.append(item)
                         e_asset.append(item.name)
-                        target.Rig.Rig.storage.remove(item)
+                        target.Rig.storage.remove(item)
                 print(f'The following assets were extracted {e_asset}.')
             else:
                 print(f'No items can be extracted unless the target Rig '
