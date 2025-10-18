@@ -58,7 +58,7 @@ class Rig:
         self.broken = False
         self.condition = 0
         self.storage = [Asset.Asset('data_spike'), Asset.Asset('data_spike'),
-                        Asset.Asset('encrypted_drive')]
+                        Asset.Asset('removable_drive')]
 
     def __str__(self):
         """
@@ -132,7 +132,7 @@ class Rig:
         :return:
         """
         if isinstance(asset, Asset.Asset) and asset.encrypted != True:
-            self.storage.append(asset)
+            self.__storage.append(asset)
 
             # Extracting the names and encryption status of the assets
             # into a temp list
