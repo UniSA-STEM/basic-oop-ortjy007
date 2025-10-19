@@ -123,13 +123,20 @@ class Hacker:
         :param r_name: str
         :return: None
         """
+        # Validating Rig existence
         if not self.__rig:
+
+            # Validating crypto token, if so deleted from the inventory
+            # and recycle it
             if Hacker.scanning_inventory('crypto_token'):
                 Hacker.USED_ASSETS.append(Hacker.retrieving_asset('crypto_token'))
                 self.__inventory.remove(Asset.name == 'crypto_token')
+
+                # Generating new Rig
                 self.__rig = Rig(r_name)
                 print(f'{r_name} Rig has been acquired and is operational.\n'
                       f'One crypto token removed from inventory')
+
             else:
                 print('Acquiring a Rig can only be done using a valid '
                       'crypto token.\n')
@@ -144,6 +151,8 @@ class Hacker:
         :return: bool
         """
         found_asset = False
+
+        # Validating asset name and checking inventory list
         if asset_name in Asset.ASSET_NAMES:
             inventory = [Asset.name for Asset.Asset in self.__inventory]
             if asset_name in inventory:
@@ -163,6 +172,7 @@ class Hacker:
         :param asset: Asset
         :return:
         """
+        # Validating asset and storing it
         if isinstance(asset, Asset) and asset.encrypted != True:
             self.__inventory.append(asset)
 
@@ -192,7 +202,7 @@ class Hacker:
             del self.__inventory[self.__inventory.index(asset_name)]
         return r_asset
 
-    def extracting_assets(self, target: str) -> None:
+    def extracting_assets(self, target: Rig) -> None:
         """
         Extracting assets from a target rig. Validating if we have a Rig,
         if tha Hacker is exposed and if it is a valid Hacker.
@@ -202,17 +212,19 @@ class Hacker:
         # Temp list to hold the names of extracted assets
         e_asset = []
 
+        # Validating Rig existence, exposure and valid target - broken -
+        # (in that order)
         if self.__rig is None:
             print('A Rig is needed to extract assets.')
         elif self.__exposed:
             print("Your can't extract assets while exposed.")
         elif isinstance(target, Hacker):
-            if target.Rig.broken:
-                for item in target.Rig.storage:
+            if target.broken:
+                for item in target.storage:
                     if not item.encrypted:
                         self.__inventory.append(item)
                         e_asset.append(item.name)
-                        target.Rig.storage.remove(item)
+                        target.storage.remove(item)
                 print(f'The following assets were extracted {e_asset}.')
             else:
                 print(f'No items can be extracted unless the target Rig '
@@ -247,6 +259,20 @@ class Hacker:
         else:
             print('Only valid assets can be decrypted/encrypted.')
 
-    def launching_data_spikes(self) -> str:
-        # consumes data spikes from their rigs storage
-        pass
+    def launching_data_spikes(self, target: Rig, asset: Asset) -> None:
+
+        tmp_hold = None
+
+        # Validating Token, Rig, exposure, target in that order
+        if not Hacker.scanning_inventory('data_spike'):
+            print('Need a data spike chip to proceed with launching an attack.')
+        if self.__rig is None:
+            print('A Rig is needed to extract assets.')
+        elif not self.__exposed:
+            print("Your can't extract assets while exposed.")
+        elif not isinstance(target, Rig):
+            print('The target needs to be a valid Rig.')
+
+        elif Hacker.retrieving_asset(Hacker,'data_spike'):
+            self.__inventory.remove(Asset.name == 'data_spike')
+            target.taking_hits()
