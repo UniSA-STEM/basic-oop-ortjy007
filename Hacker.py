@@ -186,7 +186,8 @@ class Hacker:
         """
         Storing assets in the Hacker's inventory after validation
         and printing the revised contents of inventory w/ decryption
-        status.
+        status. The more assets the Hacker saves the less exposure
+        it has (value decreased by .5 per save)
         :param asset: Asset
         :return:
         """
@@ -208,6 +209,9 @@ class Hacker:
             for i in range(0, len(tmp_list), group_s):
                 group = tmp_list[i:i + group_s]
             print(*group)
+
+            # Decreasing trace level
+            self.__trace_level -= .5
 
         else:
             print('Only decrypted valid assets can be saved')
@@ -344,3 +348,6 @@ class Hacker:
         tmp = self.__inventory[ndx]
         Hacker.USED_ASSETS.append(tmp)
         self.__inventory.remove(Asset.name == asset_name)
+
+        # The more you recycle the stronger you are!
+        self.__trace_level -= .5
