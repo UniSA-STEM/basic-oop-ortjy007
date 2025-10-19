@@ -242,13 +242,13 @@ class Hacker:
             print('A Rig is needed to extract assets.')
         elif self.__exposed:
             print("Your can't extract assets while exposed.")
-        elif isinstance(target, Hacker):
-            if target.rig.broken:
-                for item in target.rig.storage:
+        elif isinstance(target, Rig):
+            if not target.broken:
+                for item in target.storage:
                     if not item.encrypted:
                         self.__inventory.append(item)
                         e_asset.append(item.name)
-                        target.rig.storage.remove(item)
+                        target.storage.remove(item)
 
                         self.trace_level += 1
                 print(f'The following assets were extracted {e_asset}.')
