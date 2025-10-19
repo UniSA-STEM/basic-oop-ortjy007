@@ -8,7 +8,6 @@ Username: ortjy007
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
-
 class Asset:
     """
     Asset Class representing digital assets.
@@ -28,10 +27,10 @@ class Asset:
     # Class level attributes
     ENCRYPTED = False  # set as default for all instances
     ASSET_NAMES = ['crypto_token', 'hardware_patch', 'data_spike',
-                   'removable_drive', 'security_rig'
+                   'removable_drive', 'security_chip'
                    ]  # current list of assets
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, description=None):
         """
         Constructor method, the name attribute serves as both name and
         to select the corresponding description.
@@ -39,7 +38,7 @@ class Asset:
         """
         self.name = name
         self.encrypted = Asset.ENCRYPTED
-        self.description = name
+        self.description = description
 
     def __str__(self):
         """
@@ -47,9 +46,9 @@ class Asset:
         :return: str
         """
         if self.encrypted:
-            return f'<{self.__name}>:<{self.__description}> [Encrypted]'
+            return f'{self.__name}: {self.__description} [Encrypted]'
         else:
-            return f'<{self.__name}>:<{self.__description}>'
+            return f'{self.__name}: {self.__description}'
 
     @property
     def name(self) -> str:
@@ -84,7 +83,7 @@ class Asset:
         return self.__encrypted
 
     @encrypted.setter
-    def encrypted(self, enc: bool) -> None:
+    def encrypted(self, enc=False) -> None:
         """
         Encrypted method validated as boolean. If invalid input is
         given a default the False value is given to the asset.
@@ -92,7 +91,6 @@ class Asset:
         :return: None
         """
         if isinstance(enc, bool):
-            print(f'Encrypted value set to {enc}')
             self.__encrypted = enc
         else:
             print('Invalid input, default False value used.')
@@ -107,22 +105,22 @@ class Asset:
         return self.__description
 
     @description.setter
-    def description(self, info: int) -> None:
+    def description(self, name: str) -> None:
         """
         Matching asset name to description from specification document,
         if the name does not match is declared as an 'Unidentified asset'.
-        :param info: str
+        :param name: str
         :return: None
         """
-        if info == 'crypto_token':
+        if self.__name == 'crypto_token':
             self.__description = 'Used to acquire or repair rigs.(H)'
-        elif info == 'hardware_patch':
+        elif self.__name == 'hardware_patch':
             self.__description = 'Used to update rigs -level & storage-.(H)'
-        elif info == 'data_spike':
+        elif self.__name == 'data_spike':
             self.__description = 'Used in battles to damage rigs.(R)'
-        elif info == 'removable_drive':
+        elif self.__name == 'removable_drive':
             self.__description = 'Found in rigs and used for extraction.(R)'
-        elif info == 'security_rig':
+        elif self.__name == 'security_chip':
             self.__description = 'Used to encrypt or decrypt assets.(H/R)'
         else:
             self.__description = 'Unidentified asset.'
