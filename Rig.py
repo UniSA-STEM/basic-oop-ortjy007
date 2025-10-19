@@ -208,7 +208,7 @@ class Rig:
         print(f'Remaining encrypted assets remain:', tmp_list)
         return return_list
 
-    def upgrading(self, asset: Asset) -> None:
+    def upgrading(self, asset: Asset) -> int:
         """
         Upgrading Rig method validating the asset as a 'hardware patch'
         and upgrading one unit at the time to maximum of 2 (neg).
@@ -235,20 +235,30 @@ class Rig:
         Printing Rig condition after damage.
         :return:
         """
-        if -2 >= self.__condition < 0:
+        # Starting with a better rig
+        if self.__condition <= 0:
             self.__damage += .5
-        elif self.__condition >= 0:
-            self.__damage += 1
+            self.__condition +=.5
+
+            # Keeping damage between boundaries
             if self.__damage > 2:
                 self.__damage = 2
-        temp = self.__condition + self.__damage
-        print('damage', self.__damage)
-        print('condition', self.__condition)
-        print(temp)
-        if self.__damage >= 2:
-            self.__condition = 2
+            if self.__condition > 2:
+                self.__condition = 2
+
+        # Continue with an average rig
+        elif self.__condition >0:
+            self.damage += 1
+            self.__condition += 1
+
+            # Keeping damage between boundaries
+            if self.__damage > 2:
+                self.__damage = 2
+            if self.__condition > 2:
+                self.__condition = 2
+
         print(f'{self.__name} has taken a hit and its condition is '
-              f'{Rig.CONDITION[temp]}.')
+              f'{Rig.CONDITION[self.__condition]}.')
 
     def repairing(self, asset: Asset) -> None:
         """
@@ -258,11 +268,12 @@ class Rig:
         :param asset: 'crypto_token'
         :return: None
         """
-        if self.__condition >= 0:
+        if self.__condition <= 0:
             print(f'{self.__name} is not damaged, no repairs done.')
         elif isinstance(asset, Asset) and asset.name == 'crypto_token':
             self.__damage = 0
             self.__broken = False
+            self.__condition = 0
             print(f'{self.__name} has been repaired and it is Pristine with '
                   f'0 damage.')
         else:
