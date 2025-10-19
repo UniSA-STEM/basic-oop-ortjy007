@@ -10,7 +10,6 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 
 from Asset import Asset
 from random import randint
-from Hacker import Hacker
 
 class Rig:
     """
@@ -252,6 +251,6 @@ class Rig:
         :return: new_asset: Asset
         """
         select = randint(0, len(Asset.ASSET_NAMES) - 1)
-        new_asset = Asset.(Asset.ASSET_NAMES[select])
+        new_asset = Asset(Asset.ASSET_NAMES[select])
         print(f'\nA {new_asset.name} has been randomly created.')
         return new_asset
