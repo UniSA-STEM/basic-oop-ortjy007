@@ -247,7 +247,7 @@ class Hacker:
                 for item in target.storage:
                     if not item.encrypted:
                         self.__inventory.append(item)
-                        e_asset.append(item.name)
+                        e_asset.append(item.description)
                         target.storage.remove(item)
 
                         self.trace_level += 1
@@ -323,10 +323,11 @@ class Hacker:
         5 otherwise it will revert to False.
         :return: None
         """
-        if self.__trace_level == 5:
+        if self.__trace_level >= 5:
             self.__exposed = True
-        if self.__trace_level < 5:
+        else:
             self.__exposed = False
+        print(f"Are you exposed? {self.__exposed}.")
 
     def __recycling(self, asset_name: str) -> None:
         """
