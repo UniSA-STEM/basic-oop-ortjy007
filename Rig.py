@@ -210,26 +210,22 @@ class Rig:
         else:
             print('Upgrade can only be done using a hardware_patch.\n')
 
-    def taking_hits(self, asset: Asset) -> None:
+    def taking_hits(self) -> None:
         """
-        Taking hits method validating the asset as a 'data spike'
-        and reducing the rigs condition while increasing the damage.
+        Taking hits method reducing the rigs condition while increasing
+        the damage.
         Printing Rig condition after damage.
-        :param asset:
         :return:
         """
-        if isinstance(asset, Asset) and asset.name == 'data_spike':
-            if -2 >= self.__condition < 0:
-                self.__damage += .5
-            elif self.__condition >= 0:
-                self.__damage += 1
-                if self.__damage > 2:
-                    self.__damage = 2
-            temp = self.__condition + self.__damage
-            print(f'{self.__name} has taken a hit and its condition is '
-                  f'{Rig.CONDITION[temp]}.')
-        else:
-            print('A valid data_spike asset is needed, no damage done.\n')
+        if -2 >= self.__condition < 0:
+            self.__damage += .5
+        elif self.__condition >= 0:
+            self.__damage += 1
+            if self.__damage > 2:
+                self.__damage = 2
+        temp = self.__condition + self.__damage
+        print(f'{self.__name} has taken a hit and its condition is '
+              f'{Rig.CONDITION[temp]}.')
 
     def repairing(self, asset: Asset) -> None:
         """
