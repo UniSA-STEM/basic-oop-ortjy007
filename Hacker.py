@@ -23,14 +23,18 @@ class Hacker:
 
     Instance attributes:
     +name: str
-    -exposed: bool
-    -trace_level: int
-    -inventory: []
+    -exposed: bool default value set False
+    -trace_level: int default value set at 0
+    -inventory: [] empty
+    -inventory_size: int set at 10
 
     Methods w/decorators:
     +name @property getter + setter
     +encrypted @property getter + setter
     +description @property getter + setter
+    +inventory @property getter + setter
+    +max_inventory @property getter + setter
+    +rig @property getter + setter
 
     And the following methods:
     acquiring_rig: Using the Rig module to acquire a Rig after
@@ -69,6 +73,7 @@ class Hacker:
         self.trace_level = 0
         self.exposed = False
         self.inventory = [Asset('crypto_token')]
+        self.inventory_size = 10
         self.rig = Rig(rig)
 
         # Standard output stream restored
@@ -124,6 +129,15 @@ class Hacker:
     @inventory.setter
     def inventory(self, h_inventory: list) -> None:
         self.__inventory = h_inventory
+
+    @property
+    def inventory_size(self) -> int:
+        """inventory_size property"""
+        return self.__inventory_size
+
+    @inventory_size.setter
+    def inventory_size(self, h_inventory_size: int) -> None:
+        self.__inventory_size = h_inventory_size
 
     @property
     def rig(self) -> Rig:
@@ -184,9 +198,10 @@ class Hacker:
 
     def storing_asset(self, asset: Asset) -> None:
         """
-        Storing assets in the Hacker's inventory after validation
-        and printing the revised contents of inventory w/ decryption
-        status. The more assets the Hacker saves the less exposure
+        Storing assets in the Hacker's inventory after validation and
+        checking maximum capacity and printing the revised contents of
+        inventory w/ decryption status. The more assets the Hacker saves
+        the less exposure
         it has (value decreased by .5 per save)
         :param asset: Asset
         :return:
@@ -195,24 +210,32 @@ class Hacker:
         if isinstance(asset, Asset) and asset.encrypted != True:
             self.__inventory.append(asset)
 
-            # Extracting the names and encryption status of the assets
-            # into a temp list
-            tmp_list = []
-            group_s = 3
+            # Validating storage capacity
+            cap = self.__inventory_size - len(self.__inventory)
+            if cap < self.__inventory_size:
 
-            for item in self.__inventory:
-                tmp_list.append('A')
-                tmp_list.append(item.name)
-                tmp_list.append('has been stored.')
+                self.__inventory.append(asset)
 
-            # printing in legible groups
-            for i in range(0, len(tmp_list), group_s):
-                group = tmp_list[i:i + group_s]
-            print(*group)
+                # Extracting the names and encryption status of the assets
+                # into a temp list
+                tmp_list = []
+                group_s = 3
 
-            # Decreasing trace level
-            self.__trace_level -= .5
+                for item in self.__inventory:
+                    tmp_list.append('A')
+                    tmp_list.append(item.name)
+                    tmp_list.append('has been stored.')
 
+                # printing in legible groups
+                group = []
+                for i in range(0, len(tmp_list), group_s):
+                    group = tmp_list[i:i + group_s]
+                print(* group)
+
+                # Decreasing trace level
+                self.__trace_level -= .5
+            else:
+                print('Maximum inventory capacity reached, no more assets can be saved.')
         else:
             print('Only decrypted valid assets can be saved')
 
