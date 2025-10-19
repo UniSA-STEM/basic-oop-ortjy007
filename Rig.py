@@ -148,13 +148,17 @@ class Rig:
             # Extracting the names and encryption status of the assets
             # into a temp list
             tmp_list = []
+            group_s = 3
 
             for item in self.__storage:
+                tmp_list.append('A')
                 tmp_list.append(item.name)
-                tmp_list.append(item.encrypted)
-                tmp_list.append('/')
-            print(f'Stored assets:', *tmp_list)
+                tmp_list.append('has been stored.')
 
+            # printing in legible groups
+            for i in range(0, len(tmp_list), group_s):
+                group = tmp_list[i:i + group_s]
+            print(*group)
         else:
             print('Only decrypted valid assets can be saved')
 
@@ -225,6 +229,9 @@ class Rig:
         """
         Taking hits method reducing the rigs condition while increasing
         the damage.
+        .5 damage if the rig's condition is awsome or better
+        1 if the rig's condition is pristine or worse
+        if maximums or minimums are exceeded they reset to the max values
         Printing Rig condition after damage.
         :return:
         """
@@ -235,6 +242,11 @@ class Rig:
             if self.__damage > 2:
                 self.__damage = 2
         temp = self.__condition + self.__damage
+        print('damage', self.__damage)
+        print('condition', self.__condition)
+        print(temp)
+        if self.__damage >= 2:
+            self.__condition = 2
         print(f'{self.__name} has taken a hit and its condition is '
               f'{Rig.CONDITION[temp]}.')
 
