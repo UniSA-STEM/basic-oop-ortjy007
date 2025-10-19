@@ -10,6 +10,9 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 
 from Asset import Asset
 from random import randint
+import sys
+import os
+
 
 class Rig:
     """
@@ -52,12 +55,21 @@ class Rig:
 
     def __init__(self, name: str):
 
+        # Using redirecting the standard output stream while the assets
+        # are created during initialization
+        or_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+
         self.name = name
         self.damage = 0
         self.broken = False
         self.condition = 0
         self.storage = [Asset('data_spike'), Asset('data_spike'),
                         Asset('removable_drive')]
+
+        # Standard output stream restored
+        sys.stdout.close()
+        sys.stdout = or_stdout
 
     def __str__(self):
         """
@@ -74,7 +86,7 @@ class Rig:
         return (f'\nRig: {self.__name}\n'
                 f'Condition: {Rig.CONDITION[self.__condition]}\n'
                 f'Upgrade level: {self.__condition * -1}\n'
-                f'Stored assets: {*tmp_list,}')
+                f'Stored assets: {*tmp_list,}\n\n')
 
     @property
     def name(self) -> str:
