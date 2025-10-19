@@ -21,12 +21,12 @@ class Rig:
 
     Instance level attributes:
     -name: str
-    -damage: int starting at 0
-    -broken: bool starting False
-    -condition: int starting at 0
-    -storage: list (starts with the following Assets:
+    -damage: int default value set at 0
+    -broken: bool default value set False
+    -condition: int default value set at 0
+    -storage: list (default value with the following Assets:
     data_spikes x2, encrypted_drive)
-    -max_storage: int starting at 10
+    -max_storage: int default value set at 10
 
     Methods w/decorators:
     +name @property getter + setter
