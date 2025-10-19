@@ -13,7 +13,6 @@ from random import randint
 import sys
 import os
 
-
 class Rig:
     """
     Rig class representing computers.
@@ -208,7 +207,7 @@ class Rig:
         print(f'Remaining encrypted assets remain:', tmp_list)
         return return_list
 
-    def upgrading(self, asset: Asset) -> int:
+    def upgrading(self, asset: Asset) -> None:
         """
         Upgrading Rig method validating the asset as a 'hardware patch'
         and upgrading one unit at the time to maximum of 2 (neg).
