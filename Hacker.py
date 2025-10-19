@@ -10,12 +10,16 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 import re
 from Rig import Rig
 from Asset import Asset
-
+import sys
+import os
 
 class Hacker:
     """
     Hacker represents a person (with a cryptic and/or stylish pseudonym) who
     uses computers to gain unauthorized access to data.
+
+    Class attributes:
+    USED_ASSETS: []  used for recycling
 
     Instance attributes:
     +name: str
@@ -39,8 +43,10 @@ class Hacker:
     extracting_assets: extracting assets from target rig transferred to
     Hackers inventory.
     encrypting_decrypting_assets: as noted after security_chip validation.
-    launching_data_spikes: attack on a Hackers rig after
-    data_spike validation.
+    launching_data_spikes: attack on a Hackers rig after data_spike
+    validation.
+    exposing: trace level <= 5 the exposed variable changes to True.
+    -recycling: storing the used assets for recycling....
     """
 
     USED_ASSETS = []  # used for recycling :)
@@ -53,20 +59,31 @@ class Hacker:
         acquisition with the inventory initiated but empty.
         """
 
+        # Using redirecting the standard output stream while the assets
+        # are created during initialization
+
+        or_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+
         self.name = name
         self.trace_level = 0
         self.exposed = False
         self.inventory = [Asset('crypto_token')]
-        self.rig = rig
+        self.rig = Rig(rig)
 
-        # Retrieving initial crypto token from inventory
-        # token_for_rig = Hacker.retrieving_asset(Hacker,'crypto_token')
+        # Standard output stream restored
+        sys.stdout.close()
+        sys.stdout = or_stdout
 
-        # Acquiring a Rig as part of the constructor as instructed in brief
-        # Hacker.acquiring_rig(Hacker, 'r2', token_for_rig)
+        print(f'{self.name} Hacker and {rig} Rig created during initialization\n'
+              f'... whatever happens, happens...\n\n')
 
     def __str__(self) -> str:
-        return f'{self.__name}\nRig name:{Asset.name}\nInventory:{self.__inventory}'
+        inv_names= []
+
+        for Asset.name in self.__inventory:
+            inv_names.append(Asset.name)
+        return f'Hacker Name: {self.__name}\nRig name: {self.__rig}\nInventory: {self.__inventory}'
 
     @property
     def name(self) -> str:
@@ -117,26 +134,24 @@ class Hacker:
     # Class Methods
     def acquiring_rig(self, r_name: str) -> None:
         """
-        Rig acquisition for Hacker's use following the cyber token asset validation
-        if stored in inventory. Check if there is no active rig, token gets deleted
-        from inventory and recycled.
+        Rig acquisition for Hacker's use following the cyber token asset
+        validation if stored in inventory. Token gets deleted from inventory
+         and recycled.
         :param r_name: str
         :return: None
         """
-        # Validating Rig existence
-        if not self.__rig:
+        # Validating crypto token
+        if 'crypto_token' in Asset.ASSET_NAMES:
+            inventory = [Asset.name for Asset.name in self.__inventory]
+            if 'crypto_token' in inventory:
 
-            # Validating crypto token, if so deleted from the inventory
-            # and recycle it
-            if Hacker.scanning_inventory('crypto_token'):
-                Hacker.USED_ASSETS.append(Hacker.retrieving_asset('crypto_token'))
-                self.__inventory.remove(Asset.name == 'crypto_token')
+                # Recycling data spike
+                self.__recycling('crypto_token')
 
                 # Generating new Rig
                 self.__rig = Rig(r_name)
                 print(f'{r_name} Rig has been acquired and is operational.\n'
                       f'One crypto token removed from inventory')
-
             else:
                 print('Acquiring a Rig can only be done using a valid '
                       'crypto token.\n')
@@ -154,14 +169,14 @@ class Hacker:
 
         # Validating asset name and checking inventory list
         if asset_name in Asset.ASSET_NAMES:
-            inventory = [Asset.name for Asset.Asset in self.__inventory]
+            inventory = [Asset.name for Asset.name in self.__inventory]
             if asset_name in inventory:
                 found_asset = True
                 print(f'{asset_name} found.')
             else:
                 print(f'{asset_name} not in inventory.')
         else:
-            print(f'{asset_name} is not a valid asset')
+            print(f'{asset_name} is not a valid asset, no search carried out.')
         return found_asset
 
     def storing_asset(self, asset: Asset) -> None:
@@ -197,34 +212,37 @@ class Hacker:
         :return: asset
         """
         r_asset = None
-        if Hacker.scanning_inventory(asset_name):
+        if asset_name in self.__inventory:
             r_asset = self.__inventory[self.__inventory.index(asset_name)]
             del self.__inventory[self.__inventory.index(asset_name)]
+            print(f'{asset_name} retrieved successfully.')
         return r_asset
 
     def extracting_assets(self, target: Rig) -> None:
         """
         Extracting assets from a target rig. Validating if we have a Rig,
-        if tha Hacker is exposed and if it is a valid Hacker.
-        :param target: Hacker
+        if the Hacker is exposed and if it is a valid Hacker.
+        :param target: Rig
         :return: None
         """
         # Temp list to hold the names of extracted assets
         e_asset = []
 
         # Validating Rig existence, exposure and valid target - broken -
-        # (in that order)
+        # in that order
         if self.__rig is None:
             print('A Rig is needed to extract assets.')
         elif self.__exposed:
             print("Your can't extract assets while exposed.")
         elif isinstance(target, Hacker):
-            if target.broken:
-                for item in target.storage:
+            if target.rig.broken:
+                for item in target.rig.storage:
                     if not item.encrypted:
                         self.__inventory.append(item)
                         e_asset.append(item.name)
-                        target.storage.remove(item)
+                        target.rig.storage.remove(item)
+
+                        self.trace_level += 1
                 print(f'The following assets were extracted {e_asset}.')
             else:
                 print(f'No items can be extracted unless the target Rig '
@@ -241,38 +259,79 @@ class Hacker:
         # Checking if asset is valid
         if isinstance(asset, Asset):
 
-            # Checking if the hacker has a valid security chip, if so deleted from
-            # the inventory and recycle it
-            if Hacker.scanning_inventory('security_chip'):
-                Hacker.USED_ASSETS.append(Hacker.retrieving_asset('security_chip'))
-                self.__inventory.remove(Asset.name == 'security_chip')
+            # Validating security chip
+            if 'security_chip' in Asset.ASSET_NAMES:
+                inventory = [Asset.name for Asset.name in self.__inventory]
+                if 'security_chip' in inventory:
 
-                # Updating asset status
-                if asset.encrypted:
-                    asset.encrypted = False
-                    print(f'{asset.name} has been decrypted.')
-                elif not asset.encrypted:
-                    asset.encrypted = True
-                    print(f'{asset.name} has been encrypted.')
+                    # Recycling security chip
+                    self.__recycling('security_chip')
+
+                    # Updating asset status
+                    if asset.encrypted:
+                        asset.encrypted = False
+                        print(f'{asset.name} has been decrypted.')
+                    elif not asset.encrypted:
+                        asset.encrypted = True
+                        print(f'{asset.name} has been encrypted.')
             else:
                 print('Need a valid security chip to proceed with decryption/encryption.')
         else:
             print('Only valid assets can be decrypted/encrypted.')
 
-    def launching_data_spikes(self, target: Rig, asset: Asset) -> None:
-
-        tmp_hold = None
-
-        # Validating Token, Rig, exposure, target in that order
-        if not Hacker.scanning_inventory('data_spike'):
-            print('Need a data spike chip to proceed with launching an attack.')
+    def launching_data_spikes(self, target: Rig) -> None:
+        """
+        Launching data spikes attacks after validating data_spike token, rig, exposure
+        and target rig. Data_spike automatically deleted from inventory. Trace level
+        increased by 1.
+        :param target: Rig
+        :return: None
+        """
+        # Validating Rig, exposure, target and token in that order
         if self.__rig is None:
-            print('A Rig is needed to extract assets.')
-        elif not self.__exposed:
-            print("Your can't extract assets while exposed.")
+            print('A Rig is needed to launch attacks.')
+        elif self.__exposed:
+            print("Your can't attack while exposed.")
         elif not isinstance(target, Rig):
             print('The target needs to be a valid Rig.')
+        elif 'data_spike' in Asset.ASSET_NAMES:
+            inventory = [Asset.name for Asset.name in self.__inventory]
+            if 'data_spike' in inventory:
 
-        elif Hacker.retrieving_asset(Hacker,'data_spike'):
-            self.__inventory.remove(Asset.name == 'data_spike')
-            target.taking_hits()
+                # Recycling data spike
+                self.__recycling('data_spike')
+
+                # Attack and message to user
+                Hacker.target.taking_hits()
+                print(f'Attack successful.')
+
+                self.trace_level += 1
+        else:
+            print(f'Attack unsuccessful.')
+
+    def exposing(self):
+        """
+        exposing method to update the trace value if trace level reaches
+        5 otherwise it will revert to False.
+        :return: None
+        """
+        if self.__trace_level == 5:
+            self.__exposed = True
+        if self.__trace_level < 5:
+            self.__exposed = False
+
+    def __recycling(self, asset_name: str) -> None:
+        """
+        private method to identify, remove and recycle asset once its
+        existence has been validated
+        :param asset_name: str
+        :return: None
+        """
+        inv_names = []
+
+        for Asset.name in self.__inventory:
+            inv_names.append(Asset.name)
+        ndx = inv_names.index(asset_name)
+        tmp = self.__inventory[ndx]
+        Hacker.USED_ASSETS.append(tmp)
+        self.__inventory.remove(Asset.name == asset_name)
