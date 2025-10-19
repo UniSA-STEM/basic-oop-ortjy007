@@ -310,7 +310,7 @@ class Hacker:
                 self.__recycling('data_spike')
 
                 # Attack and message to user
-                Hacker.target.taking_hits()
+                Rig.taking_hits(target)
                 print(f'Attack successful.')
 
                 self.trace_level += 1
