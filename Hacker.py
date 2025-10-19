@@ -75,7 +75,7 @@ class Hacker:
         sys.stdout.close()
         sys.stdout = or_stdout
 
-        print(f'{self.name} Hacker and {rig} Rig created during initialization\n'
+        print(f'{name} Hacker and {rig} Rig created during initialization\n'
               f'... whatever happens, happens...\n\n')
 
     def __str__(self) -> str:
@@ -91,9 +91,12 @@ class Hacker:
         return self.__name
 
     @name.setter
-    def name(self, h_name: str) -> None:
-        self.__name = h_name if (h_name == re.search(r'[a-zA-Z]', h_name)
-                                 or re.search(r'\d', h_name)) else 'Invalid name.'
+    def name(self, name: str) -> None:
+
+        if name == re.search(r'[a-zA-Z]', name) or re.search(r'\d', name):
+            self.__name = name
+        else:
+            print('Invalid name, default name used.')
 
     @property
     def trace_level(self) -> int:
@@ -194,12 +197,17 @@ class Hacker:
             # Extracting the names and encryption status of the assets
             # into a temp list
             tmp_list = []
+            group_s = 3
 
             for item in self.__inventory:
+                tmp_list.append('A')
                 tmp_list.append(item.name)
-                tmp_list.append(item.encrypted)
-                tmp_list.append('/')
-            print(f'Stored assets:', *tmp_list)
+                tmp_list.append('has been stored.')
+
+            # printing in legible groups
+            for i in range(0, len(tmp_list), group_s):
+                group = tmp_list[i:i + group_s]
+            print(*group)
 
         else:
             print('Only decrypted valid assets can be saved')
