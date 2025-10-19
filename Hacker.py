@@ -29,22 +29,18 @@ class Hacker:
     +description @property getter + setter
 
     And the following methods:
-    Acquiring_rig: Using the Rig module to acquire a Rig after
-    cyber token validation.
-    Scanning_inventory: searches for a specific asset and returns True
+    acquiring_rig: Using the Rig module to acquire a Rig after
+    cyber_token validation.
+    scanning_inventory: searches for a specific asset and returns True
     if found.
-    Storing_asset: storage asset in inventory after validation.
-    Retrieving_asset: checks the inventory and if found retrieves a
+    storing_asset: storage asset in inventory after validation.
+    retrieving_asset: checks the inventory and if found retrieves a
     specific asset.
-    Extracting_assets: extracting assets from target rig transferred to
-    Hackers inventory
-
-    Encrypting_asset: asset_name, security_chip # done inside their inventory or
-    Rig's storage, check security chip first, update storage. Encrypted
-    assets can not be transferred.
-    Decrypting_asset: asset_name
-    Launching_data_spikes: target_rig  # same as launch attack?? consumes data
-    spike from own storage
+    extracting_assets: extracting assets from target rig transferred to
+    Hackers inventory.
+    encrypting_decrypting_assets: as noted after security_chip validation.
+    launching_data_spikes: attack on a Hackers rig after
+    data_spike validation.
     """
 
     USED_ASSETS = []  # used for recycling :)
@@ -132,7 +128,8 @@ class Hacker:
                 Hacker.USED_ASSETS.append(Hacker.retrieving_asset('crypto_token'))
                 self.__inventory.remove(Asset.name == 'crypto_token')
                 self.__rig = Rig(r_name)
-                print(f'{r_name} Rig has been acquired and is operational.')
+                print(f'{r_name} Rig has been acquired and is operational.\n'
+                      f'One crypto token removed from inventory')
             else:
                 print('Acquiring a Rig can only be done using a valid '
                       'crypto token.\n')
@@ -198,7 +195,7 @@ class Hacker:
     def extracting_assets(self, target: str) -> None:
         """
         Extracting assets from a target rig. Validating if we have a Rig,
-        if Hacker is exposed and if it is a valid Hacker.
+        if tha Hacker is exposed and if it is a valid Hacker.
         :param target: Hacker
         :return: None
         """
@@ -223,11 +220,32 @@ class Hacker:
         else:
             print('Extracting assets unsuccessful.')
 
-    def encrypting_asset(self, security_chip) -> bool:
-        pass
+    def encrypting_decrypting_asset(self, asset: Asset) -> None:
+        """
+        Encrypting and decrypting valid assets after security chip validation.
+        :param asset: Asset
+        :return: None
+        """
+        # Checking if asset is valid
+        if isinstance(asset, Asset):
 
-    def decrypting_asset(self, security_chip) -> bool:
-        pass
+            # Checking if the hacker has a valid security chip, if so deleted from
+            # the inventory and recycle it
+            if Hacker.scanning_inventory('security_chip'):
+                Hacker.USED_ASSETS.append(Hacker.retrieving_asset('security_chip'))
+                self.__inventory.remove(Asset.name == 'security_chip')
+
+                # Updating asset status
+                if asset.encrypted:
+                    asset.encrypted = False
+                    print(f'{asset.name} has been decrypted.')
+                elif not asset.encrypted:
+                    asset.encrypted = True
+                    print(f'{asset.name} has been encrypted.')
+            else:
+                print('Need a valid security chip to proceed with decryption/encryption.')
+        else:
+            print('Only valid assets can be decrypted/encrypted.')
 
     def launching_data_spikes(self) -> str:
         # consumes data spikes from their rigs storage
