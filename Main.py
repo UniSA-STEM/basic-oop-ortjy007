@@ -221,8 +221,8 @@ def hacker_test() -> None:
 def edge_tests() -> None:
     pass
 
-
 def main():
+    pass
 
 if __name__ == "__main__":
     main()
