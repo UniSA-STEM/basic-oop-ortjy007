@@ -21,11 +21,12 @@ class Rig:
 
     Instance level attributes:
     -name: str
-    -damage: int
-    -broken: bool
-    -condition: int
+    -damage: int starting at 0
+    -broken: bool starting False
+    -condition: int starting at 0
     -storage: list (starts with the following Assets:
     data_spikes x2, encrypted_drive)
+    -max_storage: int starting at 10
 
     Methods w/decorators:
     +name @property getter + setter
@@ -33,6 +34,7 @@ class Rig:
     +broken @property getter + setter
     +condition @property getter + setter
     +storage @property getter + setter
+    +max_storage @property getter + setter
 
     Rig class methods:
     Storing_assets: validated list storing digital assets.
@@ -45,7 +47,7 @@ class Rig:
     Generate_asset: Generate a random asset from the Asset module.
 
     Static method:
-    Consume_asset: Remove asset from storage as consumed
+    Consume_asset: Remove asset from storage as they are used consumed
     """
     # Condition levels for all Rigs
     CONDITION = {2: 'Broken', 1.5: 'Holding on', 1: 'A bit hammered',
@@ -65,6 +67,7 @@ class Rig:
         self.condition = 0
         self.storage = [Asset('data_spike'), Asset('data_spike'),
                         Asset('removable_drive')]
+        self.max_storage = 10
 
         # Standard output stream restored
         sys.stdout.close()
@@ -85,7 +88,8 @@ class Rig:
         return (f'\nRig: {self.__name}\n'
                 f'Condition: {Rig.CONDITION[self.__condition]}\n'
                 f'Upgrade level: {self.__condition * -1}\n'
-                f'Stored assets: {*tmp_list,}\n\n')
+                f'Stored assets: {*tmp_list,}\n'
+                f'Maximum storage capacity: {self.__max_storage}\n')
 
     @property
     def name(self) -> str:
@@ -132,34 +136,52 @@ class Rig:
     def storage(self, s_storage: list) -> None:
         self.__storage = s_storage
 
+    @property
+    def max_storage(self) -> int:
+        """max_storage property"""
+        return self.__max_storage
+
+    @max_storage.setter
+    def max_storage(self, s_max_storage: int) -> None:
+        self.__max_storage = s_max_storage
+
     # Class Methods
     def storing_assets(self, asset: Asset) -> None:
         """
         Storing assets in the Rig's storage after validation
         and printing the revised contents of storage w/ decryption
-        status.
+        status and capacity available.
         :param asset: Asset
         :return:
         """
         if isinstance(asset, Asset) and asset.encrypted != True:
-            self.__storage.append(asset)
 
-            # Extracting the names and encryption status of the assets
-            # into a temp list
-            tmp_list = []
-            group_s = 3
+            # Validating storage capacity
+            cap = self.__max_storage - len(self.__storage)
+            if cap < self.__max_storage:
 
-            for item in self.__storage:
-                tmp_list.append('A')
-                tmp_list.append(item.name)
-                tmp_list.append('has been stored.')
+                self.__storage.append(asset)
 
-            # printing in legible groups
-            for i in range(0, len(tmp_list), group_s):
-                group = tmp_list[i:i + group_s]
-            print(*group)
+                # Extracting the names and encryption status of the assets
+                # into a temp list
+                tmp_list = []
+                group_s = 3
+
+                for item in self.__storage:
+                    tmp_list.append('A')
+                    tmp_list.append(item.name)
+                    tmp_list.append('has been stored.')
+
+                # Printing in legible groups
+                for i in range(0, len(tmp_list), group_s):
+                    group = tmp_list[i:i + group_s]
+                print(* group)
+                print(f'The remaining storage capacity is {cap}.')
+
+            else:
+                print('Maximum Storage capacity reached, no more assets can be saved.')
         else:
-            print('Only decrypted valid assets can be saved')
+            print('Only decrypted valid assets can be saved.')
 
     def releasing_asset(self, asset_name: str) -> Asset:
         """
@@ -207,22 +229,32 @@ class Rig:
         print(f'Remaining encrypted assets remain:', tmp_list)
         return return_list
 
-    def upgrading(self, asset: Asset) -> None:
+    def upgrading(self) -> None:
         """
         Upgrading Rig method validating the asset as a 'hardware patch'
-        and upgrading one unit at the time to maximum of 2 (neg).
+        from storage and upgrading one unit at the time to maximum
+        of 2 (neg). Increase storage capacity by 1.
         Printing Rig condition after upgrade.
-        :param asset: 'hardware patch'
-        :return:
+        :return: None
         """
-        if isinstance(asset, Asset) and asset.name == 'hardware_patch':
+        # Validating hardware patch
+        tmp_sto = []
+        for item in self.__storage:
+            tmp_sto.append(Asset.name)
+
+        # Remove hardware patch from storage... no recycle in Rig (yet!)
+        if 'hardware_patch' in tmp_sto:
+            self.__storage.remove(Asset.name == 'hardware_patch')
+
+            # Resetting Rig values
             self.__condition -= 1
             if self.__condition < -2:
                 self.__condition = -2
+                self.__max_storage += 1
             print(f'{self.__name} has been upgraded to '
-                  f'{Rig.CONDITION[self.__condition]}.')
+                    f'{Rig.CONDITION[self.__condition]}.')
         else:
-            print('Upgrade can only be done using a hardware_patch.\n')
+            print('Upgrade can only be done if there is a hardware patch in storage.\n')
 
     def taking_hits(self) -> None:
         """
@@ -259,24 +291,35 @@ class Rig:
         print(f'{self.__name} has taken a hit and its condition is '
               f'{Rig.CONDITION[self.__condition]}.')
 
-    def repairing(self, asset: Asset) -> None:
+    def repairing(self) -> None:
         """
         Repairing a Rig method, validating for damage status (< 0) and
-        crypto_token asset, damage level set to 0 and broken status
+        crypto token asset from storage, damage level set to 0 and broken status
         reset to False.
-        :param asset: 'crypto_token'
         :return: None
         """
+        # Validating the need for repairs
         if self.__condition <= 0:
             print(f'{self.__name} is not damaged, no repairs done.')
-        elif isinstance(asset, Asset) and asset.name == 'crypto_token':
-            self.__damage = 0
-            self.__broken = False
-            self.__condition = 0
-            print(f'{self.__name} has been repaired and it is Pristine with '
-                  f'0 damage.')
+
+            # Validating hardware patch
+            tmp_sto = []
+            for item in self.__storage:
+                tmp_sto.append(Asset.name)
+
+            # Remove hardware patch from storage... no recycle in Rig (yet!)
+            if 'crypto_token' in tmp_sto:
+                self.__storage.remove(Asset.name == 'crypto_token')
+
+                # Remove reset Rig to original state
+                self.__damage = 0
+                self.__broken = False
+                self.__condition = 0
+                self.__max_storage = 10
+                print(f'{self.__name} has been repaired and it is Pristine with '
+                      f'0 damage\nand storage capacity of 5.')
         else:
-            print('A valid crypto_token asset is needed, no repairs done.')
+            print('Repair can only be done if there is a crypto token in storage.')
 
     def generate_asset(self) -> Asset:
         """
