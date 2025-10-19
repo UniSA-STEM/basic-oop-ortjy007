@@ -158,7 +158,7 @@ class Rig:
 
             # Validating storage capacity
             cap = self.__max_storage - len(self.__storage)
-            if cap < self.__max_storage:
+            if self.__max_storage > cap > 0:
 
                 self.__storage.append(asset)
 
