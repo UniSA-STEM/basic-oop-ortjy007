@@ -339,14 +339,21 @@ class Hacker:
         # Validating Rig, exposure, target and token in that order
         if self.__rig is None:
             print('A Rig is needed to launch attacks.')
+
         elif self.__exposed:
             print("Your can't attack while exposed.")
+
         elif not isinstance(target, Rig):
             print('The target needs to be a valid Rig.')
-        elif 'data_spike' in Asset.ASSET_NAMES:
-            inventory = [Asset.name for Asset.name in self.__inventory]
-            if 'data_spike' in inventory:
 
+        elif 'data_spike' in Asset.ASSET_NAMES:
+
+            # Validating security chip in inventory
+            tmp_inv = []
+            for items in self.__inventory:
+                tmp_inv.append(items.name)
+
+            if 'data_spike' in tmp_inv:
                 # Recycling data spike
                 self.__recycling('data_spike')
 
@@ -355,6 +362,9 @@ class Hacker:
                 print(f'Attack successful.')
 
                 self.trace_level += 1
+            else:
+                print(f'Need a valid data spike in the inventory\n'
+                      f'to attack. No attack launched.')
         else:
             print(f'Attack unsuccessful.')
 
