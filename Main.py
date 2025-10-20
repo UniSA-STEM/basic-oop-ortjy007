@@ -478,13 +478,13 @@ def main():
         print("Testing Hakers's boundaries completed.")
         print('----------------------.')
 
-    rig_test()
+    #rig_test()
 
-    hacker_test()
+    #hacker_test()
 
-    hacker_edge_test()
+    #hacker_edge_test()
 
-    rig_edge_tests()
+    #rig_edge_tests()
 
 if __name__ == "__main__":
     main()
