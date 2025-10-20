@@ -146,20 +146,26 @@ def main():
         faye_v.rig.repairing()
         print(f"\nfaye_v's rig status after repairs:\n{faye_v.rig}1.6 Passed\n")
 
+        print("All Rig methods tested.")
+        print('----------------------.')
+
     def hacker_test() -> None:
         """
         Second test, Hackers
         :return: None
         """
+        print("Testing Hackers's methods.")
+        print('----------------------.')
+
         # Generating three hackers and testing the Rig's methods first
-        print("Generating three hackers and testing the Rig's methods first")
+        print("2.0 Generating three hackers and testing the Rig's methods first")
         ed_w = Hacker('ed', 'e1')
         ain = Hacker('ain', 'a1')
         julia = Hacker('julia', 'j1')
 
         # Generating random assets
-        print('1 Hackers methods:\nGenerating random assets from different rigs:')
-        print("Assets generated through ed_w's rig:")
+        print("2.1 Hackers methods:\nGenerating random assets from different rigs:\n"
+              "Assets generated through ed_w's rig:")
         asset10 = ed_w.rig.generate_asset()
         asset11 = ed_w.rig.generate_asset()
         asset12 = ed_w.rig.generate_asset()
@@ -173,10 +179,10 @@ def main():
         asset16 = julia.rig.generate_asset()
         asset17 = julia.rig.generate_asset()
         asset18 = julia.rig.generate_asset()
+        print('2.1 Passed\n')
 
         # Storing assets in the inventory
-        print("Storing assets in the Hackers inventory:")
-        print('\ned_w storing assets:')
+        print("2.20Storing assets in the Hackers inventory:\ned_w storing assets:")
         ed_w.storing_asset(asset10)
         ed_w.storing_asset(asset11)
         ed_w.storing_asset(asset12)
@@ -190,9 +196,10 @@ def main():
         julia.storing_asset(asset16)
         julia.storing_asset(asset17)
         julia.storing_asset(asset18)
+        print('2.2 Passed\n')
 
         # Encrypting and decrypting assets
-        print("Generating security chips and using them to encrypt "
+        print("2.3 Generating security chips and using them to encrypt\n"
               "and decrypt assets in storage:")
         asset20 = Asset('security_chip')
         ed_w.storing_asset(asset13)
@@ -218,22 +225,30 @@ def main():
 
         print('\ned_w decrypting assets:')
         ed_w.encrypting_decrypting_asset(asset17)
+        print('2.3 Passed\n')
 
-        print('\nain launching data spikes on ed_w:')
+        print('2.4 Launching data spikes to other rigs\n'
+              'ain launching data spikes on ed_w:')
         ain.launching_data_spikes(ed_w.rig)
         ain.launching_data_spikes(ed_w.rig)
         ain.launching_data_spikes(ed_w.rig)
         ain.launching_data_spikes(ed_w.rig)
         ain.launching_data_spikes(ed_w.rig)
+        print('2.4 Passed\n')
 
-        print('\nPrinting ed_w inventory (to be raided):')
+        print('2.5 Printing ed_w inventory (to be raided):')
         print(ed_w.inventory)
+        print('2.5 Passed\n')
 
-        print('\nain extracting unencrypted assets from ed_w:')
+        print('2.6 Extracting unencrypted assets from inventory:\n'
+              'ain extracting unencrypted assets from ed_w:')
         ain.extracting_assets(ed_w.rig)
+        print('2.6 Passed\n')
 
-        print('\nain checking his exposure:')
+        print('2.7 ain checking his exposure:')
         print(ain.exposing())
+        print('2.7 Passed\nAll Hacker methods tested.')
+        print('----------------------.')
 
     def rig_edge_tests() -> None:
         """
@@ -329,8 +344,7 @@ def main():
         faye_v.rig.repairing()
         print('3.5 Passed\n\n')
 
-        print('All Rig methods tested.')
-        print("Testing Rig's boundaries completed.")
+        print("All Rig methods tested.\nTesting Rig's boundaries completed.")
         print('----------------------.')
 
     def hacker_edge_test() -> None:
