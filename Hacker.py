@@ -208,11 +208,10 @@ class Hacker:
         """
         # Validating asset and storing it
         if isinstance(asset, Asset) and asset.encrypted != True:
-            self.__inventory.append(asset)
 
             # Validating storage capacity
             cap = self.__inventory_size - len(self.__inventory)
-            if cap < self.__inventory_size:
+            if self.__inventory_size > cap > 0:
 
                 self.__inventory.append(asset)
 
@@ -237,7 +236,7 @@ class Hacker:
             else:
                 print('Maximum inventory capacity reached, no more assets can be saved.')
         else:
-            print('Only decrypted valid assets can be saved')
+            print('Only decrypted valid assets can be saved in the inventory.')
 
     def retrieving_asset(self, asset_name: str) -> Asset:
         """
@@ -247,10 +246,21 @@ class Hacker:
         :return: asset
         """
         r_asset = None
-        if asset_name in self.__inventory:
-            r_asset = self.__inventory[self.__inventory.index(asset_name)]
-            del self.__inventory[self.__inventory.index(asset_name)]
-            print(f'{asset_name} retrieved successfully.')
+
+        # Validating the asset name against the valid assets, check that
+        # is not encrypted, copying it to a holding variable and deleting
+        # from the Hackers's inventory. Return the asset on the holding variable.
+        if asset_name in Asset.ASSET_NAMES:
+            for item in self.__inventory:
+                if item.name == asset_name and item.encrypted != True:
+                    return_asset = item
+            if isinstance(r_asset, Asset):
+                self.__inventory.remove(r_asset)
+                print(f'{asset_name} released from inventory.')
+            else:
+                print(f'No decrypted {asset_name} in inventory.')
+        else:
+            print(f'Need a valid asset name.')
         return r_asset
 
     def extracting_assets(self, target: Rig) -> None:
@@ -270,7 +280,7 @@ class Hacker:
         elif self.__exposed:
             print("Your can't extract assets while exposed.")
         elif isinstance(target, Rig):
-            if not target.broken:
+            if target.broken:
                 for item in target.storage:
                     if not item.encrypted:
                         self.__inventory.append(item)
@@ -285,30 +295,34 @@ class Hacker:
         else:
             print('Extracting assets unsuccessful.')
 
-    def encrypting_decrypting_asset(self, asset: Asset) -> None:
+    def encrypting_decrypting_asset(self, asset_to_change: Asset) -> None:
         """
         Encrypting and decrypting valid assets after security chip validation.
-        :param asset: Asset
+        :param asset_to_change: Asset
         :return: None
         """
-        # Checking if asset is valid
-        if isinstance(asset, Asset):
+        # Checking if asset to change is valid
+        if isinstance(asset_to_change, Asset):
 
             # Validating security chip
             if 'security_chip' in Asset.ASSET_NAMES:
-                inventory = [Asset.name for Asset.name in self.__inventory]
-                if 'security_chip' in inventory:
+
+                # Validating security chip in inventory
+                tmp_inv = []
+                for items in self.__inventory:
+                    tmp_inv.append(items.name)
+                if 'security_chip' in tmp_inv:
 
                     # Recycling security chip
                     self.__recycling('security_chip')
 
                     # Updating asset status
-                    if asset.encrypted:
-                        asset.encrypted = False
-                        print(f'{asset.name} has been decrypted.')
-                    elif not asset.encrypted:
-                        asset.encrypted = True
-                        print(f'{asset.name} has been encrypted.')
+                    if asset_to_change.encrypted:
+                        asset_to_change.encrypted = False
+                        print(f'{asset_to_change} has been decrypted.')
+                    elif not asset_to_change.encrypted:
+                        asset_to_change.encrypted = True
+                        print(f'{asset_to_change} has been encrypted.')
             else:
                 print('Need a valid security chip to proceed with decryption/encryption.')
         else:
